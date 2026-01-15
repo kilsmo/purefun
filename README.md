@@ -145,9 +145,9 @@ Example:
 
 ```
 # This function doubles an integer
-# i is an integer that should be doibled
+# i is an integer that should be doubled
 pure double(i int) : int
-  # This line doebles the value and returns it.
+  # This line doubles the value and returns it.
   i * 2
 ```
 
@@ -292,11 +292,11 @@ An expression starts a branch tree, so does an object.
 **Imports**
 
 ```
-math:fun
+fun:math
   double
   sqrt
 
-io:fun
+fun:io
   readFile
   writeFile
 ```
