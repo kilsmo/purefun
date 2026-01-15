@@ -60,12 +60,12 @@ side main()
 
 ### 3.2 Recursive Functions
 
+```
 fun:list
   head
   isEmpty
   tail
 
-```
 pure sumList(l List<int>, acc int): int
   isEmpty(l) -> acc
   _ -> self(tail(l), acc + head(l))
