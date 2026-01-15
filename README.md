@@ -19,11 +19,11 @@ Purefun programs may contain pure and side functions — representing two worlds
 Each file may optionally begin with imports before all function/type definitions:
 
 ```
-'fun/math'
+fun:math
   double
   sqrt
   
-'fun/io'
+fun:io
   readFile
   writeFile
 ```
@@ -35,7 +35,6 @@ Each file may optionally begin with imports before all function/type definitions
 Purefun has three function types:
 
 * `pure` — no side effects  
-* `tail` — no side effects, supports tail recursion  
 * `side` — allows side effects (I/O, state, randomness, etc.)
 
 Strings are delimited by single quotes (`'like this'`).
@@ -59,17 +58,14 @@ side main()
 
 **Note:** Parentheses are always required after a function name, even if it takes no parameters (e.g., side main()).
 
-### 3.2 Tail Functions
+### 3.2 Recursive Functions
 
-`tail` marks tail-recursive functions that are guaranteed not to consume stack space:
-
-```
-'fun/list'
+fun:list
   head
   isEmpty
   tail
 
-tail sumList(l List<int>, acc int): int
+pure sumList(l List<int>, acc int): int
   isEmpty(l) -> acc
   _ -> self(tail(l), acc + head(l))
 ```
@@ -77,9 +73,7 @@ tail sumList(l List<int>, acc int): int
 Generic types use angle brackets (`<>`).
 
 `self` refers to the current function and is used for explicit recursion.
-In `tail` functions, `self` is optimized for constant stack usage.
-
-Tail recursion is preferred over loops. If loops are introduced, they will be syntactic sugar for tail-recursive calls.
+`self` is optimized for constant stack usage.
 
 ## 4. Types
 
@@ -140,16 +134,37 @@ pure describeAge(age int): string
     'adult'
 ```
 
-## 6. Control Flow
+# 6. Comments
 
-### 6.1 Conditional expressions (like cond or if, no keyword)
+There is only one supported way to write a comment. A comment starts with #, and only whitespaces (to get the comment on the same indentation as the code line) before the comment is allowed, nothing else.
+
+The comment comments the line below, a comment can be multi-line, where all comment lines starts with #.
+
+Example:
 
 ```
-x < 0                // if
+# This function doubles an integer
+# i is an integer that should be doibled
+pure double(i int) : int
+  # This line doebles the value and returns it.
+  i * 2
+```
+
+## 7. Control Flow
+
+### 7.1 Conditional expressions (like cond or if, no keyword)
+
+```
+# if
+x < 0
   'negative'
-x == 0               // else if
+
+# else if
+x == 0
   'zero'
-_                    // else
+
+# else
+_
   'positive'
 ```
 
@@ -185,7 +200,7 @@ _
   'positive'
 ```
 
-### 6.2 Match Expressions (no keyword)
+### 7.2 Match Expressions (no keyword)
 
 Standard syntax (two indentation levels):
 
@@ -208,12 +223,12 @@ color
   _ -> 'Unknown'
 ```
 
-## 7. Reserved Words
+## 8. Reserved Words
 
 **Core Modifiers**
 
 ```
-pure, side, tail, self, type
+pure, side, self, type
 ```
 
 **Primitives**
@@ -234,13 +249,7 @@ List, Maybe, Map, Result
 true, false, _ (_ catches all values)
 ```
 
-**Reserved for Future Use**
-
-```
-return, loop, break, continue, async, await
-```
-
-## 8. Indentation
+## 9. Indentation
 
 Blocks are made with indentation, not inside curly braces or something similar.
 
@@ -261,12 +270,12 @@ _
   '0 or negative'
 ```
 
-### 8.1 Block Creators
+### 9.1 Block Creators
 
 **Functions**
 
 ```
-pure, tail, side
+pure, side
 ```
 
 **Conditionals**
@@ -282,19 +291,19 @@ An expression starts a branch tree, so does an object.
 **Imports**
 
 ```
-'math.fun'
+math:fun
   double
   sqrt
 
-'io.fun'
+io:fun
   readFile
   writeFile
 ```
 
-## 9. Try Purefun
+## 10. Try Purefun
 
 ```
-'fun/io'
+fun:io
   'print'
 
 pure double(i int): int
@@ -303,7 +312,7 @@ pure double(i int): int
 print('If you double 4 you get ' + double(4))
 ```
 
-## 10. Philosophy
+## 11. Philosophy
 
 * **Purity with pragmatism** — everything pure by default, but side effects allowed when declared.
 * **Structural Clarity** — code should read like prose and feel like composing ideas, not issuing commands.
@@ -314,7 +323,7 @@ Purefun is not just written — it’s *composed*.
 
 Purefun was created not to replace other languages, but to remind us why we fell in love with programming in the first place.
 
-## 11. Status
+## 12. Status
 
 Purefun is in active design.  
 
@@ -322,6 +331,6 @@ This document describes the initial language vision and may evolve through discu
 
 Contributions welcome.
 
-## 12. Why contribute?
+## 13. Why contribute?
 
 Purefun is a language in design. If you want to contribute ideas, help refine syntax, or propose libraries, open an issue or start a discussion. No compiler is needed yet — your voice shapes the language.
