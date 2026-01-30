@@ -9,7 +9,7 @@
 *  Operators have **fixed precedence levels** (higher binds tighter):
 
 ```
-Level 6: ( )               grouping
+Level 6: ( )               grouping in
 
 Level 5: * / // %          multiplicative
 
@@ -111,5 +111,11 @@ Level 1: ||                logical OR
 2 > 1 || 3 > 2 -> true
 
 2 < 1 || 3 > 2 -> false
+
+2 * 3 + 4 -> 10
+
+2 + 3 * 4 -> 14
+
+
 
 
