@@ -35,7 +35,7 @@ Level 1: ||                logical OR
 
 5.  // Int division (trunkates, always returns int)
 
-6.  // Int modulo (trunkates, always returns int)
+6.  % Int modulo (trunkates, always returns int)
 
 7.  == returns true if two expressions are equal
 
