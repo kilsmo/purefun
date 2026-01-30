@@ -33,22 +33,25 @@ Level 1: ||                logical OR
 
 4.  / Division (always returns num)
 
-5.  // Int division (always returns int)
+5.  // Int division (trunkates, always returns int)
 
-6.  == returns true if two expressions are equal
+6.  // Int modulo (trunkates, always returns int)
 
-7.  != returns true if two expressions are not equal
+7.  == returns true if two expressions are equal
 
-8.  < returns true if left expression is smaller than right expression
+8.  != returns true if two expressions are not equal
 
-9.  > return true if first expression is bigger than right exoression
+9.  < returns true if left expression is smaller than right expression
 
-10. <= returns true if left expression is smaller than or equal to the right expression
+10.  > return true if first expression is bigger than right exoression
 
-11. >= returns true if left expression is bigger than or equal to the right expression
+11. <= returns true if left expression is smaller than or equal to the right expression
 
-12. && returns true if both expressions return true, don't evaluate the right expression if the left expression is false.
+12. >= returns true if left expression is bigger than or equal to the right expression
 
-13. || returns true if at least one of the expressions return true, don't evaluate the right expression if the left expression is true.
+13. && returns true if both expressions return true, don't evaluate the right expression if the left expression is false.
+
+14. || returns true if at least one of the expressions return true, don't evaluate the right expression if the left expression is true.
 
 ```
+
