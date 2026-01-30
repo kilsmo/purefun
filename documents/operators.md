@@ -11,7 +11,7 @@
 ```
 Level 6: ( )     grouping
 
-Level 5: * / %   multiplicative
+Level 5: * / // %   multiplicative
 
 Level 4: + -     additive
 
