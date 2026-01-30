@@ -1,12 +1,13 @@
 # Operators
 
-• All operators are **binary**
 
-• All operators are **infix**
+* All operators are **binary**
 
-• All operators are **left-associative**
+* All operators are **infix**
 
-• Operators have fixed precedence levels (higher binds tighter):
+* All operators are **left-associative**
+
+*  Operators have **fixed precedence levels** (higher binds tighter):
 
 * ```Level 6: ( )     grouping```
 
