@@ -43,7 +43,7 @@ Level 1: ||                logical OR
 
 9.  <  returns true if left expression is smaller than right expression
 
-10.  >  return true if first expression is bigger than right exoression
+10. >  return true if first expression is bigger than right exoression
 
 11. <= returns true if left expression is smaller than or equal to the right expression
 
