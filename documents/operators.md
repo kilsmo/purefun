@@ -1,8 +1,8 @@
 # Operators
 
-• All operators are binary  
-• All operators are infix  
-• All operators are left-associative  
+• All operators are **binary**
+• All operators are **infix**
+• All operators are **left-associative**
 
 • Operators have fixed precedence levels (higher binds tighter):
 
