@@ -8,7 +8,7 @@ The top-level expressions section shows how to use the functions.
 ### Import Section
 
 ```
-'fun/io'
+fun:io
   print
 ```
 ### Definitions Section
@@ -37,10 +37,13 @@ Top-level expressions must be declared side if using side-effect functions like 
 ```
 side main()
   r = Rect(3, 2)
-  print(area(r)) # 6
-  print(perimeter(r)) # 10
+  # 6
+  print(area(r))
+  # 10
+  print(perimeter(r))
   r2 = scale(r, 3)
-  print(area(r2)) # 54
+  # 54
+  print(area(r2))
 
 main()
 ```
@@ -52,13 +55,13 @@ main()
 Import Section
 
 ```
-'./rect.fun'
+:./rect.fun
   area
   perimeter
   scale
   Rect
 
-'fun/io'
+fun:io
   print
 ```
 
@@ -67,10 +70,17 @@ Import Section
 ```
 side main()
   r = Rect(3, 2)
-  print(area(r)) # 6
-  print(perimeter(r)) # 10
+
+  # 6
+  print(area(r))
+
+  # 10
+  print(perimeter(r))
+
   r2 = scale(r, 3)
-  print(area(r2)) # 54
+
+  # 54
+  print(area(r2))
 ```
 
 ### Top-Level Expressions Section
@@ -91,10 +101,16 @@ Another way to write the same example of the Top-level expression is:
 
 ```
 r = Rect(3, 2)
-print(area(r)) # 6
-print(perimeter(r)) # 10
+
+# 6
+print(area(r))
+
+# 10
+print(perimeter(r))
 r2 = scale(r, 3)
-print(area(r2)) # 54
+
+# 54
+print(area(r2))
 ```
 
 For this example, this code would be preferred over
