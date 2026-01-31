@@ -8,13 +8,11 @@ Purefun has three function types:
 
 `pure` — deterministic, side-effect free. Can only call `pure` or `tail` functions. Use whenever possible.
 
-`tail` — deterministic, side-effect free, tail-recursive. Can only call `pure` or `tail` functions. Use for recursive functions that must run efficiently.
-
 `side` — allows side effects (I/O, randomness, state). Can call any function type.
 
 # 1.1 Rules
 
-* `pure` and `tail` functions cannot call side functions.
+* `pure` functions cannot call side functions.
 
 * `side` functions run in the runtime and may call any other function type.
 
@@ -42,7 +40,7 @@ side logMessage(msg string)
 
 * Generics are supported, e.g., `List<int>, Map<string,int>`.
 
-* `tail` functions use `self(...)` to recurse in a stack-safe way.
+* Recursive functions use `self(...)` to recurse in a stack-safe way.
 
 ### 2.3 Examples
 
@@ -146,7 +144,7 @@ pure whichFruit(): string
 ### 6.1 Example 1 — Hello world:
 
 ```
-'fun/io'
+fun:io
   print
 
 side main()
@@ -156,11 +154,11 @@ side main()
 ### 6.2 Example 2 — Using pure program function:
 
 ```
-'fun/io'
+fun:io
   exit
   getCommandLineArguments
 
-'./math.fun'
+:./math.fun
   add
   mul
 
