@@ -110,7 +110,7 @@ Level 1: ||                logical OR
 
 2 > 1 || 3 > 2 -> true
 
-2 < 1 || 3 > 2 -> false
+2 < 1 || 3 < 2 -> false
 
 2 * 3 + 4 -> 10
 
