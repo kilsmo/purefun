@@ -6,7 +6,7 @@ This document explains how to write functions and types in Purefun, with example
 
 Purefun has three function types:
 
-`pure` — deterministic, side-effect free. Can only call `pure` or `tail` functions. Use whenever possible.
+`pure` — deterministic, side-effect free. Can only call `pure` functions. Use whenever possible.
 
 `side` — allows side effects (I/O, randomness, state). Can call any function type.
 
