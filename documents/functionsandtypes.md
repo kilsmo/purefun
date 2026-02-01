@@ -4,7 +4,7 @@ This document explains how to write functions and types in Purefun, with example
 
 ## 1. Function Types
 
-Purefun has three function types:
+Purefun has two function types:
 
 `pure` — deterministic, side-effect free. Can only call `pure` functions. Use whenever possible.
 
@@ -25,7 +25,7 @@ Purefun has three function types:
 ```
 pure greet(name string): string
 
-tail sumList(l List<int>, acc int): int
+pure sumList(l List<int>, acc int): int
 
 side logMessage(msg string)
 ```
