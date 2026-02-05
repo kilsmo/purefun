@@ -5,7 +5,7 @@ enum TokenType {
 
 class Token {
   final TokenType type;
-  final BigInt? value; // BigInt for infinite integers, null for EOF
+  final BigInt? value; // BigInt supports infinite positive/negative integers
 
   Token(this.type, [this.value]);
 
