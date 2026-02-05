@@ -1,18 +1,13 @@
 import 'lexer.dart';
+import 'token.dart';
 
 void main() {
-  print('Debug started');
+  final lexer = Lexer(
+      '1234567890123456789012345678901234567890 42 7 987654321098765432109876543210');
 
-  final lexer = Lexer('7');
-  
-  while (true) {
-    final token = lexer.nextToken();
+  Token token;
+  do {
+    token = lexer.nextToken();
     print(token);
-
-    if (token.type == TokenType.eof) {
-      break;
-    }
-  }
-
-  print('Debug finished');
+  } while (token.type != TokenType.eof);
 }

@@ -1,23 +1,10 @@
-enum TokenType {
-  digit,
-  eof,
-}
-
-class Token {
-  final TokenType type;
-  final String value;
-
-  Token(this.type, this.value);
-
-  @override
-  String toString() => 'Token($type, $value)';
-}
+import 'token.dart';
 
 class Lexer {
   final String input;
   int pos = 0;
 
-  static final Token eofToken = Token(TokenType.eof, '');
+  static final Token eofToken = Token(TokenType.eof);
 
   Lexer(this.input);
 
@@ -30,15 +17,14 @@ class Lexer {
 
   Token nextToken() {
     if (pos >= input.length) {
-      return eofToken; // always same instance
+      return eofToken;
     }
 
     while (currentChar != '\x00') {
       final ch = currentChar;
 
       if (_isDigit(ch)) {
-        advance();
-        return Token(TokenType.digit, ch);
+        return _integer(); // parse multi-digit integer
       }
 
       if (ch.trim().isEmpty) {
@@ -50,6 +36,18 @@ class Lexer {
     }
 
     return eofToken;
+  }
+
+  Token _integer() {
+    final buffer = StringBuffer();
+
+    while (_isDigit(currentChar)) {
+      buffer.write(currentChar);
+      advance();
+    }
+
+    final value = BigInt.parse(buffer.toString());
+    return Token(TokenType.integer, value);
   }
 
   bool _isDigit(String ch) {
