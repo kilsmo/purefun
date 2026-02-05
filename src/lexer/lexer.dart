@@ -17,6 +17,8 @@ class Lexer {
   final String input;
   int pos = 0;
 
+  static final Token eofToken = Token(TokenType.eof, '');
+
   Lexer(this.input);
 
   String get currentChar =>
@@ -27,6 +29,10 @@ class Lexer {
   }
 
   Token nextToken() {
+    if (pos >= input.length) {
+      return eofToken; // always same instance
+    }
+
     while (currentChar != '\x00') {
       final ch = currentChar;
 
@@ -43,7 +49,7 @@ class Lexer {
       throw Exception('Unexpected char: $ch');
     }
 
-    return Token(TokenType.eof, '');
+    return eofToken;
   }
 
   bool _isDigit(String ch) {
