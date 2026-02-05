@@ -15,32 +15,33 @@ class Lexer {
     pos++;
   }
 
-  Token nextToken() {
-    if (pos >= input.length) return eofToken;
-
-    while (currentChar != '\x00') {
-      final ch = currentChar;
-
-      // Handle negative literals: syntax is always '(-digits)'
-      if (ch == '(' && _peekNext() == '-') {
-        return _negativeInteger();
-      }
-
-      if (_isDigit(ch)) {
-        return _integer(); // positive integer
-      }
-
-      if (ch.trim().isEmpty) {
-        advance();
-        continue;
-      }
-
-      throw Exception('Unexpected char: $ch');
-    }
-
-    return eofToken;
+Token nextToken() {
+  // Skip any whitespace
+  while (_isWhitespace(currentChar)) {
+    advance();
   }
 
+  if (pos >= input.length) return eofToken;
+
+  final ch = currentChar;
+
+  // Negative literal: syntax '(-digits)'
+  if (ch == '(' && _peekNext() == '-') {
+    return _negativeInteger();
+  }
+
+  // Positive integer
+  if (_isDigit(ch)) {
+    return _integer();
+  }
+
+  throw Exception('Unexpected char: $ch');
+}
+
+// Helper: check if character is whitespace
+bool _isWhitespace(String ch) {
+  return ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r';
+}
   // Read positive integer (multi-digit)
   Token _integer() {
     final buffer = StringBuffer();
