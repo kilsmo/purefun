@@ -5,6 +5,8 @@ enum TokenType {
   minus,
   multiply,
   divide,
+  intDivide,
+  mod,
   leftParen,
   rightParen,
   eof,
@@ -22,3 +24,4 @@ class Token {
     return 'Token($type)';
   }
 }
+  

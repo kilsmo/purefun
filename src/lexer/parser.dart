@@ -44,15 +44,26 @@ class Parser {
     Object result = factor();
 
     while (currentToken.type == TokenType.multiply ||
-        currentToken.type == TokenType.divide) {
+        currentToken.type == TokenType.divide ||
+        currentToken.type == TokenType.intDivide ||
+        currentToken.type == TokenType.mod) {
       Token op = currentToken;
 
       if (op.type == TokenType.multiply) {
         eat(TokenType.multiply);
         result = _mul(result, factor());
-      } else {
+      } 
+      else if (op.type == TokenType.divide) {
         eat(TokenType.divide);
         result = _div(result, factor());
+      }
+      else if (op.type == TokenType.intDivide) {
+        eat(TokenType.intDivide);
+        result = _intDiv(result, factor());
+      }
+      else if (op.type == TokenType.mod) {
+        eat(TokenType.mod);
+        result = _mod(result, factor());
       }
     }
 
@@ -75,7 +86,7 @@ class Parser {
     if (token.type == TokenType.leftParen) {
       eat(TokenType.leftParen);
 
-      // negative literal: (-5)
+      // negative literal
       if (currentToken.type == TokenType.minus) {
         eat(TokenType.minus);
         Token numToken = currentToken;
@@ -129,5 +140,19 @@ class Parser {
       return a / b;
     }
     throw Exception("Type mismatch in /");
+  }
+
+  Object _intDiv(Object a, Object b) {
+    if (a is BigInt && b is BigInt) {
+      return a ~/ b;
+    }
+    throw Exception("// only allowed on ints");
+  }
+
+  Object _mod(Object a, Object b) {
+    if (a is BigInt && b is BigInt) {
+      return a % b;
+    }
+    throw Exception("% only allowed on ints");
   }
 }

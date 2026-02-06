@@ -18,6 +18,12 @@ class Lexer {
     }
   }
 
+  String? peek() {
+    int peekPos = pos + 1;
+    if (peekPos >= text.length) return null;
+    return text[peekPos];
+  }
+
   void skipWhitespace() {
     while (currentChar != null && currentChar!.trim().isEmpty) {
       advance();
@@ -30,9 +36,7 @@ class Lexer {
 
     while (currentChar != null &&
         (RegExp(r'[0-9]').hasMatch(currentChar!) || currentChar == '.')) {
-      if (currentChar == '.') {
-        isFloat = true;
-      }
+      if (currentChar == '.') isFloat = true;
       result += currentChar!;
       advance();
     }
@@ -55,7 +59,7 @@ class Lexer {
         return number();
       }
 
-      if (currentChar == '+') {
+      if (currentChar == '+' ) {
         advance();
         return Token(TokenType.plus);
       }
@@ -71,8 +75,18 @@ class Lexer {
       }
 
       if (currentChar == '/') {
+        if (peek() == '/') {
+          advance();
+          advance();
+          return Token(TokenType.intDivide);
+        }
         advance();
         return Token(TokenType.divide);
+      }
+
+      if (currentChar == '%') {
+        advance();
+        return Token(TokenType.mod);
       }
 
       if (currentChar == '(') {
