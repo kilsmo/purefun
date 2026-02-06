@@ -2,6 +2,8 @@ enum TokenType {
   integer,
   plus,
   minus,
+  leftParen,
+  rightParen,
   eof,
 }
 

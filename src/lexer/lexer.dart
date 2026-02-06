@@ -47,6 +47,18 @@ Token nextToken() {
     return Token(TokenType.minus);
   }
 
+  // Left parenthesis (grouping)
+  if (ch == '(') {
+    advance();
+    return Token(TokenType.leftParen);
+  }
+
+  // Right parenthesis (grouping)
+  if (ch == ')') {
+    advance();
+    return Token(TokenType.rightParen);
+  }
+
   throw Exception('Unexpected char: $ch');
 }
 

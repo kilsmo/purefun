@@ -2,7 +2,7 @@ import 'lexer.dart';
 import 'token.dart';
 
 void main() {
-  final lexer = Lexer('2 + 3 - (-7)');
+  final lexer = Lexer('2 + (3 - 1) - (-7)');
 
   Token token;
   do {
