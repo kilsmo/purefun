@@ -3,107 +3,131 @@ import 'token.dart';
 
 class Parser {
   final Lexer lexer;
-  Token currentToken;
+  late Token currentToken;
 
-  Parser(this.lexer) : currentToken = lexer.nextToken();
+  Parser(this.lexer) {
+    currentToken = lexer.getNextToken();
+  }
 
-  void _eat(TokenType type) {
+  void eat(TokenType type) {
     if (currentToken.type == type) {
-      currentToken = lexer.nextToken();
+      currentToken = lexer.getNextToken();
     } else {
-      throw Exception('Unexpected token: $currentToken, expected $type');
+      throw Exception('Expected $type but got ${currentToken.type}');
     }
   }
 
-  dynamic parse() => _expr();
+  Object parse() {
+    return expr();
+  }
 
-  // expr ::= term ((PLUS | MINUS) term)*
-  dynamic _expr() {
-    var result = _term();
+  Object expr() {
+    Object result = term();
 
     while (currentToken.type == TokenType.plus ||
-           currentToken.type == TokenType.minus) {
-      final op = currentToken.type;
-      _eat(op);
-      final rhs = _term();
+        currentToken.type == TokenType.minus) {
+      Token op = currentToken;
 
-      // Type check: both operands must match, except division handled separately
-      if (_typesMatch(result, rhs)) {
-        if (op == TokenType.plus) result = _add(result, rhs);
-        else result = _sub(result, rhs);
+      if (op.type == TokenType.plus) {
+        eat(TokenType.plus);
+        result = _add(result, term());
       } else {
-        throw Exception('Type mismatch for $op: $result vs $rhs');
+        eat(TokenType.minus);
+        result = _sub(result, term());
       }
     }
 
     return result;
   }
 
-  // term ::= factor ((MUL | DIV | INTDIV | MOD) factor)*
-  dynamic _term() {
-    var result = _factor();
+  Object term() {
+    Object result = factor();
 
     while (currentToken.type == TokenType.multiply ||
-           currentToken.type == TokenType.divide ||
-           currentToken.type == TokenType.intDivide ||
-           currentToken.type == TokenType.mod) {
-      final op = currentToken.type;
-      _eat(op);
-      final rhs = _factor();
+        currentToken.type == TokenType.divide) {
+      Token op = currentToken;
 
-      switch (op) {
-        case TokenType.multiply:
-          if (!_typesMatch(result, rhs)) throw Exception('Type mismatch for *: $result vs $rhs');
-          result = _mul(result, rhs);
-          break;
-        case TokenType.divide:
-          if (!_typesMatch(result, rhs)) throw Exception('Type mismatch for /: $result vs $rhs');
-          result = _div(result, rhs);
-          break;
-        case TokenType.intDivide:
-          if (!_isInt(result) || !_isInt(rhs)) throw Exception('// requires integers');
-          result = (result as BigInt) ~/ (rhs as BigInt);
-          break;
-        case TokenType.mod:
-          if (!_isInt(result) || !_isInt(rhs)) throw Exception('% requires integers');
-          result = (result as BigInt) % (rhs as BigInt);
-          break;
-        default:
-          throw Exception('Unknown operator $op');
+      if (op.type == TokenType.multiply) {
+        eat(TokenType.multiply);
+        result = _mul(result, factor());
+      } else {
+        eat(TokenType.divide);
+        result = _div(result, factor());
       }
     }
 
     return result;
   }
 
-  // factor ::= intLiteral | numLiteral | '(' expr ')'
-  dynamic _factor() {
-    if (currentToken.type == TokenType.intLiteral ||
-        currentToken.type == TokenType.numLiteral) {
-      final value = currentToken.value!;
-      _eat(currentToken.type);
-      return value;
-    } else if (currentToken.type == TokenType.leftParen) {
-      _eat(TokenType.leftParen);
-      final value = _expr();
-      _eat(TokenType.rightParen);
-      return value;
-    } else {
-      throw Exception('Unexpected token in factor: $currentToken');
+  Object factor() {
+    Token token = currentToken;
+
+    if (token.type == TokenType.integer) {
+      eat(TokenType.integer);
+      return token.value as BigInt;
     }
+
+    if (token.type == TokenType.numLiteral) {
+      eat(TokenType.numLiteral);
+      return token.value as double;
+    }
+
+    if (token.type == TokenType.leftParen) {
+      eat(TokenType.leftParen);
+
+      // negative literal: (-5)
+      if (currentToken.type == TokenType.minus) {
+        eat(TokenType.minus);
+        Token numToken = currentToken;
+
+        if (numToken.type == TokenType.integer) {
+          eat(TokenType.integer);
+          eat(TokenType.rightParen);
+          return -(numToken.value as BigInt);
+        }
+
+        if (numToken.type == TokenType.numLiteral) {
+          eat(TokenType.numLiteral);
+          eat(TokenType.rightParen);
+          return -(numToken.value as double);
+        }
+
+        throw Exception("Invalid negative literal");
+      }
+
+      Object result = expr();
+      eat(TokenType.rightParen);
+      return result;
+    }
+
+    throw Exception('Unexpected token: $token');
   }
 
-  // helpers
-  bool _typesMatch(dynamic a, dynamic b) => (a is BigInt && b is BigInt) || (a is double && b is double);
-  bool _isInt(dynamic a) => a is BigInt;
+  Object _add(Object a, Object b) {
+    if (a is BigInt && b is BigInt) return a + b;
+    if (a is double && b is double) return a + b;
+    throw Exception("Type mismatch in +");
+  }
 
-  dynamic _add(dynamic a, dynamic b) => a + b;
-  dynamic _sub(dynamic a, dynamic b) => a - b;
-  dynamic _mul(dynamic a, dynamic b) => a * b;
+  Object _sub(Object a, Object b) {
+    if (a is BigInt && b is BigInt) return a - b;
+    if (a is double && b is double) return a - b;
+    throw Exception("Type mismatch in -");
+  }
 
-  dynamic _div(dynamic a, dynamic b) {
-    // both operands must match type, either BigInt or double
-    if (a is BigInt && b is BigInt) return a.toDouble() / b.toDouble();
-    if (a is double && b is double) return a / b;
-    throw Exception('Type mismatch in division: $a / $b');
-}}
+  Object _mul(Object a, Object b) {
+    if (a is BigInt && b is BigInt) return a * b;
+    if (a is double && b is double) return a * b;
+    throw Exception("Type mismatch in *");
+  }
+
+  Object _div(Object a, Object b) {
+    if (a is BigInt && b is BigInt) {
+      return a.toDouble() / b.toDouble();
+    }
+    if (a is double && b is double) {
+      return a / b;
+    }
+    throw Exception("Type mismatch in /");
+  }
+}

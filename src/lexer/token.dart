@@ -1,20 +1,18 @@
 enum TokenType {
-  intLiteral,    // BigInt
-  numLiteral,    // double
-  plus,          // '+'
-  minus,         // '-'
-  multiply,      // '*'
-  divide,        // '/'
-  intDivide,     // '//'
-  mod,           // '%'
-  leftParen,     // '('
-  rightParen,    // ')'
+  integer,
+  numLiteral,
+  plus,
+  minus,
+  multiply,
+  divide,
+  leftParen,
+  rightParen,
   eof,
 }
 
 class Token {
   final TokenType type;
-  final dynamic value; // BigInt for intLiteral, double for numLiteral
+  final dynamic value;
 
   Token(this.type, [this.value]);
 
