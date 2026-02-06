@@ -87,7 +87,7 @@ bool _isWhitespace(String ch) {
     }
 
     final value = BigInt.parse(buffer.toString());
-    return Token(TokenType.integer, value);
+    return Token(TokenType.intLiteral, value);
   }
 
   // Read negative integer literal in form (-digits)
@@ -107,7 +107,7 @@ bool _isWhitespace(String ch) {
     advance(); // s       kip ')'
 
     final value = BigInt.parse(buffer.toString()) * BigInt.from(-1);
-    return Token(TokenType.integer, value);
+    return Token(TokenType.intLiteral, value);
   }
 
   bool _isDigit(String ch) {

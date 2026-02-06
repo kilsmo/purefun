@@ -1,9 +1,12 @@
 enum TokenType {
-  integer,
-  plus,     // '+'
-  minus,    // '-'
-  multiply, // '*'
-  divide,   // '/'
+  intLiteral,    // BigInt
+  numLiteral,    // double
+  plus,          // '+'
+  minus,         // '-'
+  multiply,      // '*'
+  divide,        // '/'
+  intDivide,     // '//'
+  mod,           // '%'
   leftParen,
   rightParen,
   eof,
@@ -11,15 +14,13 @@ enum TokenType {
 
 class Token {
   final TokenType type;
-  final BigInt? value; // BigInt supports infinite positive/negative integers
+  final dynamic value; // BigInt for intLiteral, double for numLiteral
 
   Token(this.type, [this.value]);
 
   @override
   String toString() {
-    if (type == TokenType.integer) {
-      return 'Token($type, $value)';
-    }
+    if (value != null) return 'Token($type, $value)';
     return 'Token($type)';
   }
 }

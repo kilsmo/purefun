@@ -59,9 +59,9 @@ class Parser {
 
   // factor ::= INTEGER | '(' expr ')'
   BigInt _factor() {
-    if (currentToken.type == TokenType.integer) {
-      final value = currentToken.value!;
-      _eat(TokenType.integer);
+    if (currentToken.type == TokenType.intLiteral) {
+      final value = currentToken.value! as BigInt;
+      _eat(TokenType.intLiteral);
       return value;
     } else if (currentToken.type == TokenType.leftParen) {
       _eat(TokenType.leftParen);
