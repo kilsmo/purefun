@@ -11,17 +11,7 @@ class Lexer {
 
   void advance() {
     pos++;
-    if (pos >= text.length) {
-      currentChar = null;
-    } else {
-      currentChar = text[pos];
-    }
-  }
-
-  String? peek() {
-    int peekPos = pos + 1;
-    if (peekPos >= text.length) return null;
-    return text[peekPos];
+    currentChar = pos < text.length ? text[pos] : null;
   }
 
   void skipWhitespace() {
@@ -30,22 +20,43 @@ class Lexer {
     }
   }
 
-  Token number() {
+  bool _isDigit(String char) => RegExp(r'[0-9]').hasMatch(char);
+  bool _isLetter(String char) => RegExp(r'[a-zA-Z]').hasMatch(char);
+
+  Token integer() {
     String result = '';
-    bool isFloat = false;
+    while (currentChar != null && _isDigit(currentChar!)) {
+      result += currentChar!;
+      advance();
+    }
+    return Token(TokenType.integer, BigInt.parse(result));
+  }
+
+  Token numLiteral() {
+    String result = '';
+    bool hasDot = false;
 
     while (currentChar != null &&
-        (RegExp(r'[0-9]').hasMatch(currentChar!) || currentChar == '.')) {
-      if (currentChar == '.') isFloat = true;
+        (_isDigit(currentChar!) || currentChar == '.')) {
+      if (currentChar == '.') {
+        if (hasDot) break;
+        hasDot = true;
+      }
       result += currentChar!;
       advance();
     }
 
-    if (isFloat) {
-      return Token(TokenType.numLiteral, double.parse(result));
-    } else {
-      return Token(TokenType.integer, BigInt.parse(result));
+    return Token(TokenType.numLiteral, double.parse(result));
+  }
+
+  Token identifierToken() {
+    String result = '';
+    while (currentChar != null &&
+        (_isLetter(currentChar!) || _isDigit(currentChar!))) {
+      result += currentChar!;
+      advance();
     }
+    return Token(TokenType.identifier, result);
   }
 
   Token getNextToken() {
@@ -55,51 +66,52 @@ class Lexer {
         continue;
       }
 
-      if (RegExp(r'[0-9]').hasMatch(currentChar!)) {
-        return number();
-      }
-
-      if (currentChar == '+' ) {
-        advance();
-        return Token(TokenType.plus);
-      }
-
-      if (currentChar == '-') {
-        advance();
-        return Token(TokenType.minus);
-      }
-
-      if (currentChar == '*') {
-        advance();
-        return Token(TokenType.multiply);
-      }
-
-      if (currentChar == '/') {
-        if (peek() == '/') {
-          advance();
-          advance();
-          return Token(TokenType.intDivide);
+      if (_isDigit(currentChar!)) {
+        int lookahead = pos;
+        bool hasDot = false;
+        while (lookahead < text.length &&
+            (_isDigit(text[lookahead]) || text[lookahead] == '.')) {
+          if (text[lookahead] == '.') hasDot = true;
+          lookahead++;
         }
-        advance();
-        return Token(TokenType.divide);
+        if (hasDot) return numLiteral();
+        return integer();
       }
 
-      if (currentChar == '%') {
-        advance();
-        return Token(TokenType.mod);
+      if (_isLetter(currentChar!)) return identifierToken();
+
+      switch (currentChar) {
+        case '+':
+          advance();
+          return Token(TokenType.plus);
+        case '-':
+          advance();
+          return Token(TokenType.minus);
+        case '*':
+          advance();
+          return Token(TokenType.multiply);
+        case '/':
+          advance();
+          if (currentChar == '/') {
+            advance();
+            return Token(TokenType.intDivide);
+          }
+          return Token(TokenType.divide);
+        case '%':
+          advance();
+          return Token(TokenType.mod);
+        case '(':
+          advance();
+          return Token(TokenType.leftParen);
+        case ')':
+          advance();
+          return Token(TokenType.rightParen);
+        case ':':
+          advance();
+          return Token(TokenType.colon);
       }
 
-      if (currentChar == '(') {
-        advance();
-        return Token(TokenType.leftParen);
-      }
-
-      if (currentChar == ')') {
-        advance();
-        return Token(TokenType.rightParen);
-      }
-
-      throw Exception('Unknown char: $currentChar');
+      throw Exception('Unknown character: $currentChar');
     }
 
     return Token(TokenType.eof);

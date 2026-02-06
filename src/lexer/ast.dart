@@ -14,8 +14,13 @@ class BinaryOpNode extends AstNode {
   final AstNode left;
   final String op;
   final AstNode right;
-
   BinaryOpNode(this.left, this.op, this.right);
+}
+
+class CallNode extends AstNode {
+  final String name;
+  final AstNode arg;
+  CallNode(this.name, this.arg);
 }
 
 class NegativeNode extends AstNode {

@@ -9,6 +9,8 @@ enum TokenType {
   mod,
   leftParen,
   rightParen,
+  identifier,
+  colon,
   eof,
 }
 
@@ -24,4 +26,3 @@ class Token {
     return 'Token($type)';
   }
 }
-  
