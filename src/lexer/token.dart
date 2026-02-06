@@ -7,8 +7,8 @@ enum TokenType {
   divide,        // '/'
   intDivide,     // '//'
   mod,           // '%'
-  leftParen,
-  rightParen,
+  leftParen,     // '('
+  rightParen,    // ')'
   eof,
 }
 

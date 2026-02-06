@@ -4,121 +4,93 @@ class Lexer {
   final String input;
   int pos = 0;
 
-  static final Token eofToken = Token(TokenType.eof);
-
   Lexer(this.input);
 
-  String get currentChar =>
-      pos < input.length ? input[pos] : '\x00';
+  String get currentChar => pos < input.length ? input[pos] : '\x00';
 
-  void advance() {
-    pos++;
+  void advance() => pos++;
+
+  String _peekNext([int offset = 1]) {
+    final nextPos = pos + offset;
+    return nextPos < input.length ? input[nextPos] : '\x00';
   }
 
-Token nextToken() {
-  // Skip whitespace
-  while (_isWhitespace(currentChar)) {
-    advance();
+  bool _isDigit(String ch) => ch.codeUnitAt(0) >= 48 && ch.codeUnitAt(0) <= 57;
+
+  bool _isWhitespace(String ch) => ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r';
+
+  Token nextToken() {
+    while (_isWhitespace(currentChar)) advance();
+
+    if (pos >= input.length) return Token(TokenType.eof);
+
+    final ch = currentChar;
+
+    // Negative literal: (-123) or (-3.14)
+    if (ch == '(' && _peekNext() == '-') {
+      return _negativeLiteral();
+    }
+
+    // Numbers
+    if (_isDigit(ch)) return _number();
+
+    // Operators
+    if (ch == '+') { advance(); return Token(TokenType.plus); }
+    if (ch == '-') { advance(); return Token(TokenType.minus); }
+    if (ch == '*') { advance(); return Token(TokenType.multiply); }
+    if (ch == '/') {
+      if (_peekNext() == '/') { advance(); advance(); return Token(TokenType.intDivide); }
+      advance(); 
+      return Token(TokenType.divide);
+    }
+    if (ch == '%') { advance(); return Token(TokenType.mod); }
+
+    // Parentheses
+    if (ch == '(') { advance(); return Token(TokenType.leftParen); }
+    if (ch == ')') { advance(); return Token(TokenType.rightParen); }
+
+    throw Exception('Unexpected character: $ch');
   }
 
-  if (pos >= input.length) return eofToken;
-
-  final ch = currentChar;
-
-  // Negative literal: syntax '(-digits)'
-  if (ch == '(' && _peekNext() == '-') {
-    return _negativeInteger();
-  }
-
-  // Positive integer
-  if (_isDigit(ch)) {
-    return _integer();
-  }
-
-  // '+' operator
-  if (ch == '+') {
-    advance();
-    return Token(TokenType.plus);
-  }
-
-  // '-' operator (subtraction)
-  if (ch == '-') {
-    advance();
-    return Token(TokenType.minus);
-  }
-
-  // Inside nextToken(), after handling + and -
-  if (ch == '*') {
-    advance();
-    return Token(TokenType.multiply);
-  }
-
-  if (ch == '/') {
-    advance();
-    return Token(TokenType.divide);
-  }
-
-  // Left parenthesis (grouping)
-  if (ch == '(') {
-    advance();
-    return Token(TokenType.leftParen);
-  }
-
-  // Right parenthesis (grouping)
-  if (ch == ')') {
-    advance();
-    return Token(TokenType.rightParen);
-  }
-
-  throw Exception('Unexpected char: $ch');
-}
-
-// Helper: check if character is whitespace
-bool _isWhitespace(String ch) {
-  return ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r';
-}
-  // Read positive integer (multi-digit)
-  Token _integer() {
+  Token _number() {
     final buffer = StringBuffer();
+    bool hasDot = false;
 
-    while (_isDigit(currentChar)) {
+    while (_isDigit(currentChar) || currentChar == '.') {
+      if (currentChar == '.') {
+        if (hasDot) break;
+        hasDot = true;
+      }
       buffer.write(currentChar);
       advance();
     }
 
-    final value = BigInt.parse(buffer.toString());
-    return Token(TokenType.intLiteral, value);
+    final text = buffer.toString();
+    if (hasDot) return Token(TokenType.numLiteral, double.parse(text));
+    return Token(TokenType.intLiteral, BigInt.parse(text));
   }
 
-  // Read negative integer literal in form (-digits)
-  Token _negativeInteger() {
+  Token _negativeLiteral() {
     advance(); // skip '('
     advance(); // skip '-'
 
     final buffer = StringBuffer();
-    while (_isDigit(currentChar)) {
+    bool hasDot = false;
+
+    while (_isDigit(currentChar) || currentChar == '.') {
+      if (currentChar == '.') {
+        if (hasDot) break;
+        hasDot = true;
+      }
       buffer.write(currentChar);
       advance();
     }
 
-    if (currentChar != ')') {
-      throw Exception('Expected ")" at end of negative literal');
-    }
-    advance(); // s       kip ')'
+    if (currentChar != ')') throw Exception('Expected ")" at end of negative literal');
+    advance(); // skip ')'
 
-    final value = BigInt.parse(buffer.toString()) * BigInt.from(-1);
-    return Token(TokenType.intLiteral, value);
-  }
-
-  bool _isDigit(String ch) {
-    final code = ch.codeUnitAt(0);
-    return code >= 48 && code <= 57;
-  }
-
-  // Peek next character without advancing
-  String _peekNext() {
-    final nextPos = pos + 1;
-    if (nextPos >= input.length) return '\x00';
-    return input[nextPos];
+    final text = buffer.toString();
+    if (hasDot) return Token(TokenType.numLiteral, -double.parse(text));
+    return Token(TokenType.intLiteral, -BigInt.parse(text));
   }
 }

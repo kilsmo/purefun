@@ -15,53 +15,73 @@ class Parser {
     }
   }
 
-  BigInt parse() => _expr();
+  dynamic parse() => _expr();
 
   // expr ::= term ((PLUS | MINUS) term)*
-  BigInt _expr() {
-    BigInt result = _term();
+  dynamic _expr() {
+    var result = _term();
 
     while (currentToken.type == TokenType.plus ||
-        currentToken.type == TokenType.minus) {
+           currentToken.type == TokenType.minus) {
       final op = currentToken.type;
       _eat(op);
       final rhs = _term();
 
-      if (op == TokenType.plus) {
-        result += rhs;
+      // Type check: both operands must match, except division handled separately
+      if (_typesMatch(result, rhs)) {
+        if (op == TokenType.plus) result = _add(result, rhs);
+        else result = _sub(result, rhs);
       } else {
-        result -= rhs;
+        throw Exception('Type mismatch for $op: $result vs $rhs');
       }
     }
 
     return result;
   }
 
-  // term ::= factor ((MUL | DIV) factor)*
-  BigInt _term() {
-    BigInt result = _factor();
+  // term ::= factor ((MUL | DIV | INTDIV | MOD) factor)*
+  dynamic _term() {
+    var result = _factor();
 
     while (currentToken.type == TokenType.multiply ||
-        currentToken.type == TokenType.divide) {
+           currentToken.type == TokenType.divide ||
+           currentToken.type == TokenType.intDivide ||
+           currentToken.type == TokenType.mod) {
       final op = currentToken.type;
       _eat(op);
       final rhs = _factor();
 
-      if (op == TokenType.multiply) {
-        result *= rhs;
-      } else {
-        result ~/= rhs; // integer division
+      switch (op) {
+        case TokenType.multiply:
+          if (!_typesMatch(result, rhs)) throw Exception('Type mismatch for *: $result vs $rhs');
+          result = _mul(result, rhs);
+          break;
+        case TokenType.divide:
+          if (!_typesMatch(result, rhs)) throw Exception('Type mismatch for /: $result vs $rhs');
+          result = _div(result, rhs);
+          break;
+        case TokenType.intDivide:
+          if (!_isInt(result) || !_isInt(rhs)) throw Exception('// requires integers');
+          result = (result as BigInt) ~/ (rhs as BigInt);
+          break;
+        case TokenType.mod:
+          if (!_isInt(result) || !_isInt(rhs)) throw Exception('% requires integers');
+          result = (result as BigInt) % (rhs as BigInt);
+          break;
+        default:
+          throw Exception('Unknown operator $op');
       }
     }
 
     return result;
   }
 
-  // factor ::= INTEGER | '(' expr ')'
-  BigInt _factor() {
-    if (currentToken.type == TokenType.intLiteral) {
-      final value = currentToken.value! as BigInt;
-      _eat(TokenType.intLiteral);
+  // factor ::= intLiteral | numLiteral | '(' expr ')'
+  dynamic _factor() {
+    if (currentToken.type == TokenType.intLiteral ||
+        currentToken.type == TokenType.numLiteral) {
+      final value = currentToken.value!;
+      _eat(currentToken.type);
       return value;
     } else if (currentToken.type == TokenType.leftParen) {
       _eat(TokenType.leftParen);
@@ -72,4 +92,18 @@ class Parser {
       throw Exception('Unexpected token in factor: $currentToken');
     }
   }
-}
+
+  // helpers
+  bool _typesMatch(dynamic a, dynamic b) => (a is BigInt && b is BigInt) || (a is double && b is double);
+  bool _isInt(dynamic a) => a is BigInt;
+
+  dynamic _add(dynamic a, dynamic b) => a + b;
+  dynamic _sub(dynamic a, dynamic b) => a - b;
+  dynamic _mul(dynamic a, dynamic b) => a * b;
+
+  dynamic _div(dynamic a, dynamic b) {
+    // both operands must match type, either BigInt or double
+    if (a is BigInt && b is BigInt) return a.toDouble() / b.toDouble();
+    if (a is double && b is double) return a / b;
+    throw Exception('Type mismatch in division: $a / $b');
+}}
