@@ -2,8 +2,7 @@ import 'lexer.dart';
 import 'token.dart';
 
 void main() {
-  final lexer = Lexer(
-      '(-123456789012345678901234567890) 42 7 (-987654321098765432109876543210)');
+  final lexer = Lexer('2 + 3 - (-7)');
 
   Token token;
   do {

@@ -16,7 +16,7 @@ class Lexer {
   }
 
 Token nextToken() {
-  // Skip any whitespace
+  // Skip whitespace
   while (_isWhitespace(currentChar)) {
     advance();
   }
@@ -33,6 +33,18 @@ Token nextToken() {
   // Positive integer
   if (_isDigit(ch)) {
     return _integer();
+  }
+
+  // '+' operator
+  if (ch == '+') {
+    advance();
+    return Token(TokenType.plus);
+  }
+
+  // '-' operator (subtraction)
+  if (ch == '-') {
+    advance();
+    return Token(TokenType.minus);
   }
 
   throw Exception('Unexpected char: $ch');
@@ -69,7 +81,7 @@ bool _isWhitespace(String ch) {
     if (currentChar != ')') {
       throw Exception('Expected ")" at end of negative literal');
     }
-    advance(); // skip ')'
+    advance(); // s       kip ')'
 
     final value = BigInt.parse(buffer.toString()) * BigInt.from(-1);
     return Token(TokenType.integer, value);

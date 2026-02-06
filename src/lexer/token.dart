@@ -1,5 +1,7 @@
 enum TokenType {
   integer,
+  plus,
+  minus,
   eof,
 }
 
