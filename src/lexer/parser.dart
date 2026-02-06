@@ -1,5 +1,6 @@
 import 'lexer.dart';
 import 'token.dart';
+import 'ast.dart';
 
 class Parser {
   final Lexer lexer;
@@ -17,76 +18,74 @@ class Parser {
     }
   }
 
-  Object parse() {
+  AstNode parse() {
     return expr();
   }
 
-  Object expr() {
-    Object result = term();
+  AstNode expr() {
+    AstNode node = term();
 
     while (currentToken.type == TokenType.plus ||
         currentToken.type == TokenType.minus) {
       Token op = currentToken;
-
       if (op.type == TokenType.plus) {
         eat(TokenType.plus);
-        result = _add(result, term());
+        node = BinaryOpNode(node, '+', term());
       } else {
         eat(TokenType.minus);
-        result = _sub(result, term());
+        node = BinaryOpNode(node, '-', term());
       }
     }
 
-    return result;
+    return node;
   }
 
-  Object term() {
-    Object result = factor();
+  AstNode term() {
+    AstNode node = factor();
 
     while (currentToken.type == TokenType.multiply ||
         currentToken.type == TokenType.divide ||
         currentToken.type == TokenType.intDivide ||
         currentToken.type == TokenType.mod) {
       Token op = currentToken;
-
       if (op.type == TokenType.multiply) {
         eat(TokenType.multiply);
-        result = _mul(result, factor());
-      } 
-      else if (op.type == TokenType.divide) {
+        node = BinaryOpNode(node, '*', factor());
+      } else if (op.type == TokenType.divide) {
         eat(TokenType.divide);
-        result = _div(result, factor());
-      }
-      else if (op.type == TokenType.intDivide) {
+        node = BinaryOpNode(node, '/', factor());
+      } else if (op.type == TokenType.intDivide) {
         eat(TokenType.intDivide);
-        result = _intDiv(result, factor());
-      }
-      else if (op.type == TokenType.mod) {
+        node = BinaryOpNode(node, '//', factor());
+      } else if (op.type == TokenType.mod) {
         eat(TokenType.mod);
-        result = _mod(result, factor());
+        node = BinaryOpNode(node, '%', factor());
       }
     }
 
-    return result;
+    return node;
   }
 
-  Object factor() {
+  AstNode factor() {
     Token token = currentToken;
 
+    // integer literal
     if (token.type == TokenType.integer) {
       eat(TokenType.integer);
-      return token.value as BigInt;
+      return IntNode(token.value as BigInt);
     }
 
+    // double literal
     if (token.type == TokenType.numLiteral) {
       eat(TokenType.numLiteral);
-      return token.value as double;
+      return NumNode(token.value as double);
     }
 
+    // parentheses or negative literal
     if (token.type == TokenType.leftParen) {
       eat(TokenType.leftParen);
 
-      // negative literal
+      // negative literal: (-x)
       if (currentToken.type == TokenType.minus) {
         eat(TokenType.minus);
         Token numToken = currentToken;
@@ -94,65 +93,24 @@ class Parser {
         if (numToken.type == TokenType.integer) {
           eat(TokenType.integer);
           eat(TokenType.rightParen);
-          return -(numToken.value as BigInt);
+          return NegativeNode(IntNode(numToken.value as BigInt));
         }
 
         if (numToken.type == TokenType.numLiteral) {
           eat(TokenType.numLiteral);
           eat(TokenType.rightParen);
-          return -(numToken.value as double);
+          return NegativeNode(NumNode(numToken.value as double));
         }
 
-        throw Exception("Invalid negative literal");
+        throw Exception("Invalid negative literal inside parentheses");
       }
 
-      Object result = expr();
+      // normal expression inside parentheses
+      AstNode node = expr();
       eat(TokenType.rightParen);
-      return result;
+      return node;
     }
 
     throw Exception('Unexpected token: $token');
-  }
-
-  Object _add(Object a, Object b) {
-    if (a is BigInt && b is BigInt) return a + b;
-    if (a is double && b is double) return a + b;
-    throw Exception("Type mismatch in +");
-  }
-
-  Object _sub(Object a, Object b) {
-    if (a is BigInt && b is BigInt) return a - b;
-    if (a is double && b is double) return a - b;
-    throw Exception("Type mismatch in -");
-  }
-
-  Object _mul(Object a, Object b) {
-    if (a is BigInt && b is BigInt) return a * b;
-    if (a is double && b is double) return a * b;
-    throw Exception("Type mismatch in *");
-  }
-
-  Object _div(Object a, Object b) {
-    if (a is BigInt && b is BigInt) {
-      return a.toDouble() / b.toDouble();
-    }
-    if (a is double && b is double) {
-      return a / b;
-    }
-    throw Exception("Type mismatch in /");
-  }
-
-  Object _intDiv(Object a, Object b) {
-    if (a is BigInt && b is BigInt) {
-      return a ~/ b;
-    }
-    throw Exception("// only allowed on ints");
-  }
-
-  Object _mod(Object a, Object b) {
-    if (a is BigInt && b is BigInt) {
-      return a % b;
-    }
-    throw Exception("% only allowed on ints");
   }
 }
