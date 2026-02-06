@@ -47,6 +47,17 @@ Token nextToken() {
     return Token(TokenType.minus);
   }
 
+  // Inside nextToken(), after handling + and -
+  if (ch == '*') {
+    advance();
+    return Token(TokenType.multiply);
+  }
+
+  if (ch == '/') {
+    advance();
+    return Token(TokenType.divide);
+  }
+
   // Left parenthesis (grouping)
   if (ch == '(') {
     advance();

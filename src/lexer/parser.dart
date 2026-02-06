@@ -15,25 +15,42 @@ class Parser {
     }
   }
 
-  // Entry point
-  BigInt parse() {
-    return _expr();
-  }
+  BigInt parse() => _expr();
 
   // expr ::= term ((PLUS | MINUS) term)*
   BigInt _expr() {
-    BigInt result = _factor();
+    BigInt result = _term();
 
     while (currentToken.type == TokenType.plus ||
         currentToken.type == TokenType.minus) {
       final op = currentToken.type;
       _eat(op);
-      final rhs = _factor();
+      final rhs = _term();
 
       if (op == TokenType.plus) {
         result += rhs;
       } else {
         result -= rhs;
+      }
+    }
+
+    return result;
+  }
+
+  // term ::= factor ((MUL | DIV) factor)*
+  BigInt _term() {
+    BigInt result = _factor();
+
+    while (currentToken.type == TokenType.multiply ||
+        currentToken.type == TokenType.divide) {
+      final op = currentToken.type;
+      _eat(op);
+      final rhs = _factor();
+
+      if (op == TokenType.multiply) {
+        result *= rhs;
+      } else {
+        result ~/= rhs; // integer division
       }
     }
 

@@ -1,7 +1,9 @@
 enum TokenType {
   integer,
-  plus,
-  minus,
+  plus,     // '+'
+  minus,    // '-'
+  multiply, // '*'
+  divide,   // '/'
   leftParen,
   rightParen,
   eof,
