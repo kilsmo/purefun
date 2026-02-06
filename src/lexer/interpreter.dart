@@ -1,61 +1,14 @@
 import 'ast.dart';
 
 class Interpreter {
-  final Set<String> imports;
-
-  Interpreter({required this.imports});
-
   dynamic eval(AstNode node) {
     if (node is IntNode) return node.value;
     if (node is NumNode) return node.value;
-
-    if (node is NegativeNode) {
-      final val = eval(node.value);
-      if (val is BigInt) return -val;
-      if (val is double) return -val;
-    }
+    if (node is NegativeNode) return _negate(node.expr);
 
     if (node is BinaryOpNode) {
-      final left = eval(node.left);
-      final right = eval(node.right);
-
-      if (node.op == '+') return _add(left, right);
-      if (node.op == '-') return _sub(left, right);
-      if (node.op == '*') return _mul(left, right);
-      if (node.op == '/') return _div(left, right);
-      if (node.op == '//') return _intDiv(left, right);
-      if (node.op == '%') return _mod(left, right);
-    }
-
-    if (node is CallNode) {
-      if (!imports.contains(node.name)) {
-        throw Exception('Function not imported: ${node.name}');
-      }
-      final argVal = eval(node.arg);
-      if (node.name == 'toNum') {
-        if (argVal is BigInt) return argVal.toDouble();
-        return argVal;
-      }
-      if (node.name == 'toInt') {
-        if (argVal is double) return BigInt.from(argVal);
-        return argVal;
-      }
-    }
-
-    throw Exception('Unknown AST node: $node');
-  }
-
-  dynamic evalWithConversions(AstNode node) {
-    if (node is BinaryOpNode) {
-      var left = evalWithConversions(node.left);
-      var right = evalWithConversions(node.right);
-
-      // convert types automatically if functions are imported
-      if (left is BigInt && right is double && imports.contains('toNum')) {
-        left = left.toDouble();
-      } else if (left is double && right is BigInt && imports.contains('toNum')) {
-        right = right.toDouble();
-      }
+      var left = eval(node.left);
+      var right = eval(node.right);
 
       switch (node.op) {
         case '+':
@@ -65,48 +18,66 @@ class Interpreter {
         case '*':
           return _mul(left, right);
         case '/':
-          return _div(left, right);
+          return _div(left, right);      // always returns num
         case '//':
-          return _intDiv(left, right);
+          return _intDiv(left, right);   // returns BigInt
         case '%':
-          return _mod(left, right);
+          return _mod(left, right);      // returns BigInt
+        default:
+          throw Exception('Unknown operator ${node.op}');
       }
-    } else if (node is CallNode || node is IntNode || node is NumNode || node is NegativeNode) {
-      return eval(node);
     }
 
-    throw Exception('Unknown AST node for evalWithConversions: $node');
+    if (node is CallNode) {
+      var argValue = eval(node.arg);
+      switch (node.name) {
+        case 'toNum':
+          return argValue is BigInt ? argValue.toDouble() : argValue;
+        case 'toInt':
+          return argValue is double ? BigInt.from(argValue) : argValue;
+        default:
+          throw Exception('Unknown function ${node.name}');
+      }
+    }
+
+    throw Exception('Unknown AST node: $node');
   }
 
-  dynamic _add(dynamic a, dynamic b) {
-    if (a.runtimeType != b.runtimeType) throw Exception('Type mismatch for +');
-    return a + b;
+  // helpers
+  dynamic _negate(AstNode node) {
+    var value = eval(node);
+    if (value is BigInt) return -value;
+    if (value is double) return -value;
+    throw Exception('Invalid type for negation: $value');
   }
 
-  dynamic _sub(dynamic a, dynamic b) {
-    if (a.runtimeType != b.runtimeType) throw Exception('Type mismatch for -');
-    return a - b;
+  dynamic _add(left, right) {
+    if (left.runtimeType != right.runtimeType) throw Exception('Type mismatch for +');
+    return left + right;
   }
 
-  dynamic _mul(dynamic a, dynamic b) {
-    if (a.runtimeType != b.runtimeType) throw Exception('Type mismatch for *');
-    return a * b;
+  dynamic _sub(left, right) {
+    if (left.runtimeType != right.runtimeType) throw Exception('Type mismatch for -');
+    return left - right;
   }
 
-  dynamic _div(dynamic a, dynamic b) {
-    if (a is BigInt && b is BigInt) return a.toDouble() / b.toDouble();
-    if (a is double && b is double) return a / b;
-    throw Exception('Type mismatch for /');
+  dynamic _mul(left, right) {
+    if (left.runtimeType != right.runtimeType) throw Exception('Type mismatch for *');
+    return left * right;
   }
 
-  dynamic _intDiv(dynamic a, dynamic b) {
-    if (a is BigInt && b is BigInt) return a ~/ b;
-    if (a is double && b is double) return (a ~/ b).toInt();
-    throw Exception('Type mismatch for //');
+  num _div(left, right) {
+    return (left is BigInt ? left.toDouble() : left) /
+           (right is BigInt ? right.toDouble() : right);
   }
 
-  dynamic _mod(dynamic a, dynamic b) {
-    if (a.runtimeType != b.runtimeType) throw Exception('Type mismatch for %');
-    return a % b;
+  BigInt _intDiv(left, right) {
+    if (left is BigInt && right is BigInt) return left ~/ right;
+    throw Exception('Integer division requires BigInt');
+  }
+
+  BigInt _mod(left, right) {
+    if (left is BigInt && right is BigInt) return left % right;
+    throw Exception('Modulo requires BigInt');
   }
 }

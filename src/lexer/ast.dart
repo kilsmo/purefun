@@ -10,6 +10,11 @@ class NumNode extends AstNode {
   NumNode(this.value);
 }
 
+class NegativeNode extends AstNode {
+  final AstNode expr; // field name corrected
+  NegativeNode(this.expr);
+}
+
 class BinaryOpNode extends AstNode {
   final AstNode left;
   final String op;
@@ -21,9 +26,4 @@ class CallNode extends AstNode {
   final String name;
   final AstNode arg;
   CallNode(this.name, this.arg);
-}
-
-class NegativeNode extends AstNode {
-  final AstNode value;
-  NegativeNode(this.value);
 }

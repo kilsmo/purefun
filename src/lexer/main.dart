@@ -2,16 +2,18 @@ import 'lexer.dart';
 import 'parser.dart';
 import 'interpreter.dart';
 
-void run(String input) {
-  final lexer = Lexer(input);
+void run(String source) {
+  print(source.trim());
+  final lexer = Lexer(source);
   final parser = Parser(lexer);
 
-  parser.parseImports(); // parse all atom: imports first
-  final ast = parser.parse();
-  final interpreter = Interpreter(imports: parser.importedFunctions);
-  final result = interpreter.evalWithConversions(ast);
+  parser.parseImports(); // parse top-level atom imports
 
-  print('$input = $result (${result.runtimeType})\n');
+  final ast = parser.parse();
+  final interpreter = Interpreter();
+  final result = interpreter.eval(ast);
+
+  print('= $result (${result.runtimeType})\n');
 }
 
 void main() {
@@ -23,27 +25,11 @@ toNum(7) + 3
 ''');
 
   run('7 + 3');
-
   run('2.0 + 3.1');
-
-  run('''
-atom:int
-  toNum
-
-(2 + (-3)) * 5
-''');
-
-  run('''
-atom:int
-  toNum
-
-7 // 3
-''');
-
-  run('''
-atom:int
-  toNum
-
-7 % 3
-''');
+  run('(-7) * 3 + 1');
+  run('(2 + (-3)) * 5');
+  run('7 // 3');
+  run('7 % 3');
+  run('(-3.2) + 2.0');
+  run('2.0 + (-3.1)');
 }
