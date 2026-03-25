@@ -1,3 +1,5 @@
+import 'token.dart';
+
 class Character {
   static const int and = 38;
   static const int bind = 61;
@@ -90,55 +92,6 @@ String stringifyTokenType(Token token) {
   }
 }
 
-enum TokenType {
-  add, // +
-  and, // &&
-  bind, // =
-  bool, // keyword
-  colon, // :
-  comma, // ,
-  comment, // #
-  div, // /
-  dot, // .
-  eof, // nothing
-  eol, // \r, \r\n, or \n
-  eq, // ==
-  error,
-  ge, // >=
-  gt, // >
-  identifier, // abc123
-  inlineBlock, // ->
-  int, // keyword
-  intDiv, // //
-  integer, // 123
-  lBracket, // [
-  lCurlyBracket, // {
-  le, // <=
-  lParen, // (
-  lt, // <
-  mul, // *
-  ne, // !=
-  neg, // (-
-  num, // keyword
-  number, // 123.456
-  or, // ||
-  pure, // keyword
-  rBracket, // ]
-  rCurlyBracket, // }
-  record, // keyword
-  rest, // %
-  rParen, // )
-  side, // keyword
-  sideBlock, // =>
-  sub, // -
-  space, //
-  string, // keyword
-  text, // 'Hello world' or "Hello world"
-  textBlock, // :=
-  variant, // keyword
-}
-
-// TODO: use lf as the last extra character to force to output a token.
 enum TokenizeState {
   and, // (&) [&&]
   bind, // = [== =>]
@@ -187,16 +140,6 @@ enum IncludeString {
   skipEnds, // singleQuote or doubleQuote string
   skipStart, // comment
   len, // Spaces length
-}
-
-class Token {
-  Token(this.tokenType, this.row, this.col, this.str, this.len);
-
-  final TokenType tokenType;
-  final int row;
-  final int col;
-  final String? str;
-  final int? len;
 }
 
 class Consume {
