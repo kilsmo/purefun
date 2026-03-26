@@ -53,5 +53,5 @@ class Token {
   final int row;
   final int col;
   final String? str;
-  final int? len;
+  final int len;
 }

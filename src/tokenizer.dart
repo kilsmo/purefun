@@ -469,7 +469,7 @@ List<Token> tokenize(String input) {
   var row = 1;
   var i = 0;
   var start = 0;
-  var lineStart = 0; // ✅ NEW: start index of current line
+  var lineStart = 0;
   var state = TokenizeState.noToken;
 
   while (i < tokenString.length - 1 || (i == tokenString.length - 1 && state != TokenizeState.noToken)) {
@@ -479,13 +479,10 @@ List<Token> tokenize(String input) {
     if (consumeResult.generateToken) {
       final tokenStart = start;
       final tokenEnd = consumeResult.advance ? i + 1 : i;
-
       final tokenLen = tokenEnd - tokenStart;
-
-      // ✅ FIXED: column relative to current line
       final tokenCol = tokenStart - lineStart + 1;
 
-      String? tokenStr;
+      String tokenStr = '';
 
       switch (consumeResult.includeString) {
         case IncludeString.yes:
@@ -498,10 +495,10 @@ List<Token> tokenize(String input) {
           tokenStr = tokenString.substring(tokenStart + 1, tokenEnd);
           break;
         case IncludeString.len:
-          tokenStr = null;
+          tokenStr = '';
           break;
         case IncludeString.no:
-          tokenStr = null;
+          tokenStr = '';
           break;
       }
 
@@ -532,7 +529,7 @@ List<Token> tokenize(String input) {
 
   final eofCol = i - lineStart + 1;
 
-  tokens.add(Token(TokenType.eof, row, eofCol, null, null));
+  tokens.add(Token(TokenType.eof, row, eofCol, '', 0));
   return tokens;
 }
 
@@ -543,6 +540,8 @@ void runTokenizerTests() {
   }
 }
 
+/*
 void main() {
   runTokenizerTests();
 }
+*/
