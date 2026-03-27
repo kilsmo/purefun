@@ -29,7 +29,7 @@ List<Token> negNormalizer(List<Token> tokens) {
             next.tokenType,
             token.row,
             token.col,
-            '-' + (next.str ?? ''),
+            '-' + next.str ?? ''),
             token.len + next.len + nextNext.len,
           ));
 
