@@ -3,7 +3,7 @@ enum TokenType {
   and, // &&
   bind, // =
   bool, // keyword
-  block // keyword
+  block, // keyword
   colon, // :
   comma, // ,
   comment, // #
