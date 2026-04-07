@@ -87,7 +87,6 @@ String stringifyTokenType(Token token) {
     case TokenType.string: return 'string';
     case TokenType.sub: return 'sub';
     case TokenType.text: return 'text';
-    case TokenType.textBlock: return 'textBlock';
     case TokenType.variant: return 'variant';
   }
 }
