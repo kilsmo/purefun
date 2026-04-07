@@ -13,6 +13,7 @@ enum TokenType {
   eol, // \r, \r\n, or \n
   eq, // ==
   error,
+  false, // keyword
   ge, // >=
   gt, // >
   identifier, // abc123
@@ -43,6 +44,7 @@ enum TokenType {
   space, //
   string, // keyword
   text, // 'Hello world' or "Hello world"
+  true, // keyword
   variant, // keyword
 }
 
