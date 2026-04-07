@@ -174,14 +174,6 @@ class Consume {
     }
   }
 
-  static ConsumeResult colon(int c) {
-    if (c == Character.bind) {
-      return operatorResult(TokenType.textBlock, true);
-    } else {
-      return operatorResult(TokenType.colon, false);
-    }
-  }
-
   static ConsumeResult comment(int c) {
     if (c == Character.cr || c == Character.lf) {
       return tokenResult(TokenType.comment, IncludeString.skipStart, false);
