@@ -42,7 +42,6 @@ enum TokenType {
   space, //
   string, // keyword
   text, // 'Hello world' or "Hello world"
-  textBlock, // :=
   variant, // keyword
 }
 
