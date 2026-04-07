@@ -95,7 +95,6 @@ String stringifyTokenType(Token token) {
 enum TokenizeState {
   and, // (&) [&&]
   bind, // = [== =>]
-  colon, // : [:=]
   comment, // # a comment
   cr, // Cr
   div, // / [//]
@@ -198,8 +197,6 @@ class Consume {
         return Consume.and(c);
       case TokenizeState.bind:
         return Consume.bind(c);
-      case TokenizeState.colon:
-        return Consume.colon(c);
       case TokenizeState.comment:
         return Consume.comment(c);
       case TokenizeState.cr:
@@ -337,7 +334,7 @@ class Consume {
         case Character.bind:
           return stateResult(TokenizeState.bind);
         case Character.colon:
-          return stateResult(TokenizeState.colon);
+          return tokenResult(TokenType.colon, IncludeString.no, true);
         case Character.comma:
           return tokenResult(TokenType.comma, IncludeString.no, true);
         case Character.cr:
