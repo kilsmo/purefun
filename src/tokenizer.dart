@@ -47,6 +47,7 @@ String stringifyTokenType(Token token) {
     case TokenType.add: return 'add';
     case TokenType.and: return 'and';
     case TokenType.bind: return 'bind';
+    case TokenType.block: return 'block';
     case TokenType.bool: return 'bool';
     case TokenType.colon: return 'colon';
     case TokenType.comma: return 'comma';
@@ -57,6 +58,7 @@ String stringifyTokenType(Token token) {
     case TokenType.eol: return 'eol';
     case TokenType.eq: return 'eq';
     case TokenType.error: return 'error';
+    case TokenType.false: return 'false';
     case TokenType.ge: return 'ge';
     case TokenType.gt: return 'gt';
     case TokenType.identifier: return 'identifier';
@@ -81,12 +83,14 @@ String stringifyTokenType(Token token) {
     case TokenType.record: return 'record';
     case TokenType.rest: return 'rest';
     case TokenType.rParen: return 'rParen';
+    case TokenType.self: return 'self';
     case TokenType.side: return 'side';
     case TokenType.sideBlock: return 'sideBlock';
     case TokenType.space: return 'space';
     case TokenType.string: return 'string';
     case TokenType.sub: return 'sub';
     case TokenType.text: return 'text';
+    case TokenType.true: return 'true';
     case TokenType.variant: return 'variant';
   }
 }
