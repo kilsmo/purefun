@@ -36,7 +36,7 @@ Top-level expressions must be declared side if using side-effect functions like 
 
 ```
 side main()
-  r = Rect(3, 2)
+  r = Rect { width: 3, height: 2 }
   # 6
   print(area(r))
   # 10
@@ -69,7 +69,7 @@ fun:io
 
 ```
 side main()
-  r = Rect(3, 2)
+  r = Rect { width: 3, height: 2 }
 
   # 6
   print(area(r))
