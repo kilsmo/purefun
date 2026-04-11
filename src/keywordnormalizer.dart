@@ -4,12 +4,15 @@ import 'tokenizer.dart';
 const Map<String, TokenType> keywordMap = {
   'bool': TokenType.bool,
   'block': TokenType.block,
+  'false': TokenType.false
   'int': TokenType.int,
   'num': TokenType.num,
   'pure': TokenType.pure,
   'record': TokenType.record,
+  'self': TokenType.self,
   'side': TokenType.side,
   'string': TokenType.string,
+  'true': TokenType.true,
   'variant': TokenType.variant,
 };
 
