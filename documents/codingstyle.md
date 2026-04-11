@@ -74,10 +74,10 @@ Single quotes for normal strings.
 Double quotes if the string contains single quotes or nested quotes for better readability.
 
 ```
-// Normal string
+# Normal string
 'hello'
 
-// String with nested quotes
+# String with nested quotes
 "'hello'"
 ```
 
@@ -101,7 +101,7 @@ Multi-line expressions inside functions follow the line continuation rule.
 * Only spaces are allowed on the line before #.
 
 ```
-/// Returns true if two values are equal
+# Returns true if two values are equal
 pure isEqual(val1 int, val2 int): bool
   val1 == val2
 
