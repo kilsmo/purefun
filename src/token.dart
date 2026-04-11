@@ -38,6 +38,7 @@ enum TokenType {
   record, // keyword
   rest, // %
   rParen, // )
+  self, // keyword
   side, // keyword
   sideBlock, // =>
   sub, // -
