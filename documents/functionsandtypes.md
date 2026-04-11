@@ -1,4 +1,4 @@
-# Functions and Types
+l# Functions and Types
 
 This document explains how to write functions and types in Purefun, with examples and best practices. It builds on the concepts in funfiles.md.
 
@@ -129,7 +129,7 @@ pure whichFruit(): string
 
 ## 5 Composition Tips
 
-* Keep pure logic in pure/tail functions for clarity and efficiency.
+* Keep pure logic in pure functions for clarity and efficiency.
 
 * Use side functions only for I/O or stateful interactions.
 
