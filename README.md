@@ -84,7 +84,7 @@ Types are declared using the `type` keyword.
 Purefun types are lightweight, immutable data records.
 
 ```
-type Point
+record Point
   x int
   y int
 ```
@@ -94,7 +94,7 @@ type Point
 Substructures can be defined inline:
 
 ```
-type Person
+record Person
   name string
   age int
   address
@@ -104,18 +104,10 @@ type Person
 
 ### 4.3 Construction
 
-Types can be instantiated positionally or with named arguments:
-
-**Inline tuple construction (allowed)**
+Types must be initialized with named parameters:
 
 ```
-john = Person('John', 42, ('Main St', 'Bigtown'))
-```
-
-**Named construction (recommended for clarity)**
-
-```
-john = Person(name: 'John', age: 42, address: (street: 'Main St', city: 'Bigtown'))
+john = Person { name: 'John', age: 42, address: { street: 'Main St', city: 'Bigtown' }}
 ```
 
 ## 5. Expressions and Values
@@ -229,7 +221,7 @@ color
 **Core Modifiers**
 
 ```
-pure, side, self, type
+block, pure, record, side, self
 ```
 
 **Primitives**
