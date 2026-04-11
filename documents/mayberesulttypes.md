@@ -4,25 +4,25 @@ Purefun provides two fundamental generic types for representing optional and fal
 
 ## 1. Maybe
 
-The `Maybe` type represents an optional value. It is used when a value may or may not be present, without involving side effects.
+The `Maybe` variant represents an optional value. It is used when a value may or may not be present, without involving side effects.
 
 ```
-type Maybe[T]
-  something(value T)
-  nothing
+vatiant Maybe[T]
+  Something(value T)
+  Nothing()
 ```
 
-`something(value)` holds an existing value of `type` T.
-nothing represents the absence of a value.
+`Something(value)` holds an existing value of `type` T.
+'Nothing()' represents the absence of a value.
 
 ### 1.1 Example
 
 ```
 pure findFirstEven(l List[int]): Maybe[int]
   length(l) == 0
-    nothing
+    Nothing()
   head(l) % 2 == 0
-    something(head(l))
+    Something(head(l))
   _
     self(tail(l))
 
