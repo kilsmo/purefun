@@ -4,10 +4,10 @@ This is the coding style guideline for Purefun. It focuses on clarity, consisten
 
 ## Naming
 
-### 1. Type names use PascalCase.
+### 1. Record names use PascalCase.
 
 ```
-type UserProfile
+record UserProfile
 ```
 
 ### 2. Function names use camelCase.
@@ -96,9 +96,9 @@ Multi-line expressions inside functions follow the line continuation rule.
 
 ### 9. Comments
 
-Inline comments: use // and continue to the end of the line.
-
-Doc comments: use /// placed above the function or type definition.
+* A comment starts with #
+* A comment continues to the end of the line
+* Only spaces are allowed on the line before #.
 
 ```
 /// Returns true if two values are equal
