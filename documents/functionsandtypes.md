@@ -48,7 +48,7 @@ side logMessage(msg string)
 pure greet(name string): string
   'Hello, ' + name
 
-tail factorial(n int, acc int): int
+pure factorial(n int, acc int): int
   n <= 1
     acc
   _
@@ -58,14 +58,14 @@ side printHello()
   print('Hello from side function')
 ```
 
-## 3 Types
+## 3 Records
 
-Purefun types are immutable data records.
+Purefun records are immutable data records.
 
 #### 3.1 Declaration
 
 ```
-type Point
+record Point
   x int
   y int
 ```
@@ -73,7 +73,7 @@ type Point
 #### 3.2 Nested structures
 
 ```
-type Person
+record Person
   name string
   age int
   address
@@ -84,9 +84,7 @@ type Person
 #### 3.3 Construction:
 
 ```
-Positional: john = Person('John', 42, ('Main St', 'Bigtown'))
-
-Named: john = Person(name: 'John', age: 42, address: (street: 'Main St', city: 'Bigtown'))
+john = Person { name: 'John', age: 42, address: { street: 'Main St', city: 'Bigtown' } }
 ```
 
 ## 4. Expressions
