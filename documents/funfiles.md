@@ -22,8 +22,6 @@ There are three function kinds available in the definitions section:
 
 `pure` — side-effect free functions (can call `pure`/`tail` only)
 
-`tail` — tail-recursive, side-effect free (optimized for recursion, can call `pure`/`tail` only)
-
 `side` — functions that may perform side effects (I/O, randomness, state); can call any function kind
 
 ### 2.1 Example:
@@ -48,10 +46,9 @@ side logMessage(msg string)
 
 Notes:
 
-* `pure` and `tail` functions are deterministic and cannot call `side` functions.
+* `pure` functions are deterministic and cannot call `side` functions.
 
-
-* `side` functions run in the runtime and may call `pure`, `tail`, and other `side` functions.
+* `side` functions run in the runtime and may call `pure` and other `side` functions.
 
 ## 3. Top-Level Expressions
 
