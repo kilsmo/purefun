@@ -14,7 +14,7 @@ fun:io
 ### Definitions Section
 
 ```
-type Rect
+record Rect
   width int
   height int
 
@@ -100,7 +100,7 @@ This keeps the Purefun style clear, emphasizes the side requirement for runtime 
 Another way to write the same example of the Top-level expression is:
 
 ```
-r = Rect(3, 2)
+r = Rect { width: 3, height: 2 }
 
 # 6
 print(area(r))
