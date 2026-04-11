@@ -66,6 +66,7 @@ String stringifyTokenType(Token token) {
     case TokenType.int: return 'int';
     case TokenType.intDiv: return 'intDiv';
     case TokenType.integer: return 'integer';
+    case TokenType.integerDotDot: return 'integerDotDot';
     case TokenType.lBracket: return 'lBracket';
     case TokenType.lCurlyBracket: return 'lCurlyBracket';
     case TokenType.le: return 'le';
@@ -288,6 +289,8 @@ class Consume {
   static ConsumeResult integerDot(int c) {
     if (isDigit(c)) {
       return stateResult(TokenizeState.number);
+    } else if (Character.dot) {
+      return tokenResult(TokenType.integerDotDot, IncludeString.yes, false);
     } else {
       return tokenResult(TokenType.error, IncludeString.no, false);
     }
