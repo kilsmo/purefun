@@ -5,7 +5,7 @@
 Purefun uses a string literal followed by an indented block to import functions and types from another module:
 
 ```
-'<module-source>'
+<module-source>
   <localName>
   <localPrefix>.<remoteName>
 ```
@@ -20,34 +20,34 @@ The indentation signals the import block.
 
 ### 2.1 Local File Modules
 
-Paths starting with `./` or `../` are local file modules.
+Paths starting with :./ or :../ are local file modules.
 
 Must include `.fun` extension.
 
 Examples:
 
 ```
-'./mathTools.fun'
-'../utils/list.fun'
+:./mathTools.fun'
+:../utils/list.fun'
 ```
 
 **Resolution:** relative to the importing file’s directory.
 
 ### 2.2 Standard Library Modules
 
-Paths starting with fun/ are standard library modules.
+Paths starting with fun: are standard library modules.
 
-No `.fun` extension needed.
+No `.fun` extension.
 
 Examples:
 
 ```
-'fun/io'
+fun:io
   print
-'fun/math'
+fun:math
   sin
   cos
-'fun/string'
+fun:string
   revert
 ```
 
@@ -55,16 +55,16 @@ Resolution: built-in compiler modules; cannot be shadowed.
 
 ### 2.3 Package / Registry Modules (Future)
 
-Paths of the form `<identifier>/<identifier>` refer to external packages.
+Paths of the form `<identifier>:<identifier>` refer to external packages.
 
-Must **not** start with `./` or `fun/`.
+Must **not** start with :./ or fun:
 
 Examples:
 
 ```
-'json/codec'
-'http/client'
-'mycompany/tools'
+json:codec
+http:client
+mycompany:tools
 ```
 
 ## 3. Import Lines
@@ -82,7 +82,7 @@ Remote name = `<name>`
 Example:
 
 ```
-'fun/io'
+fun:io
   print
   readFile
 ```
@@ -105,7 +105,7 @@ Remote name = last identifier (after the dot)
 Example:
 
 ```
-'fun/io'
+fun:io
   writer.Writer
   reader.Reader
 ```
@@ -113,25 +113,9 @@ Example:
 Usage:
 
 ```
-w = writer.Writer()
-r = reader.Reader()
+w = writer()
+r = reader()
 ```
-
-### 3.3 Parsing Rules
-
-For each import line:
-
-```
-if no dot:
-    localName = line
-    remoteName = line
-else:
-    split on last dot
-    localName = line
-    remoteName = last segment
-```
-
-**Remote names must be single identifiers** (no dots).
 
 ## 4. Naming Rules
 
@@ -148,16 +132,15 @@ else:
 ### 5.1 Standard Library
 
 ```
-'fun/io'
+fun:io
   print
   readFile
   writer.Writer
 ```
 
-### 5.2 Local File
+### 5.2 Local
 
-```
-'./mathTools.fun'
+fun:mathTools
   add
   algebra.sub
   matrix.Matrix
@@ -166,7 +149,7 @@ else:
 ### 5.3 Package Module
 
 ```
-'json/codec'
+json:codec
   decode
   encoder.Encoder
   pretty.format
