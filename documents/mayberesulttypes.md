@@ -7,7 +7,7 @@ Purefun provides two fundamental generic types for representing optional and fal
 The `Maybe` variant represents an optional value. It is used when a value may or may not be present, without involving side effects.
 
 ```
-vatiant Maybe[T]
+variant Maybe[T]
   Something(value T)
   Nothing()
 ```
@@ -27,9 +27,9 @@ pure findFirstEven(l List[int]): Maybe[int]
     self(tail(l))
 
 findFirstEven([1, 3, 4, 7])
-  something(v)
+  Something(v)
     print("First even: " + v)
-  nothing
+  Nothing()
     print("No even number found")
 ```
 
@@ -37,30 +37,30 @@ This design eliminates the need for null values and keeps all control flow expli
 
 ## 2. Result
 
-The Result type represents either `success` or `failure` of a computation, usually with additional information about the failure.
+The Result variant represents either `Success` or `Failure` of a computation, usually with additional information about the failure.
 
 ```
-type Result[T, E]
-  success(value T)
-  failure(error E)
+variant Result[T, E]
+  Success(value T)
+  Failure(error E)
 ```
 
-`success(value)` holds a successful result of `type` T.
-`failure(error)` carries information about what went wrong, often a `string`.
+`Success(value)` holds a successful result of `type` T.
+`Failure(error)` carries information about what went wrong, often a `string`.
 
 ### 2.1 Example:
 
 ```
 pure divide(a num, b num): Result[num, string]
   b == 0
-    failure("division by zero")
+    Failure('division by zero')
   _
-    success(a / b)
+    Success(a / b)
 
 match divide(10, 0)
-  success(v)
+  Success(v)
     print("Result: " + v)
-  failure(msg)
+  Failure(msg)
     print("Error: " + msg)
 ```
 
@@ -70,12 +70,3 @@ match divide(10, 0)
 You can think of `Maybe[T]` as equivalent to `Result[T, Unit]` with no payload for failure.
 
 Both types encourage explicit handling of missing values or errors without side effects, aligning with Purefun’s philosophy of predictable, expression-based design.
-
-## 4. Naming and Style
-
-The lowercase variant names (`something`, `nothing`, `success`, `failure`) follow Purefun’s convention:
-
-* Types are capitalized (`Maybe`, `Result`).
-* Constructors are lowercase, natural words.
-
-This balance makes data flow readable and emphasizes the values themselves rather than syntax.
