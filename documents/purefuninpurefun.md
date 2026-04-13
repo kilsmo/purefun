@@ -15,3 +15,11 @@ Purefun.
 
 Building a tokenizer for Purefun in Purefun is
 an isolated experiment that might work.
+
+### What is needed?
+
+pure isEmpty(list List<item>) : bool
+pure head(list List<V>) : V
+tail
+prepend
+empty
