@@ -18,8 +18,10 @@ an isolated experiment that might work.
 
 ### What is needed?
 
+```
 pure isEmpty(list List<V>) : bool
 pure head(list List<V>) : V
 pure tail(list List<V>) : List<V>
 pure prepend(value V, list List<V>) : List<V>
 pure empty() : List<V>
+```
