@@ -9,3 +9,9 @@ build Purefun, just with some supporting Dart
 code.
 
 ## The Tokenizer
+
+There is already a tokenizer made in Dart for
+Purefun.
+
+Building a tokenizer for Purefun in Purefun is
+an isolated experiment that might work.
