@@ -90,11 +90,11 @@ pure isAlnum(c int) : bool
   isLetter(c) || isDigit(c)
 
 pure tokenize(input string) : List<Token>
-  tokenizeLoop(input + "\n", 0, "noToken", 1, 0, empty())
+  tokenizeLoop(input + '\n', 0, 'noToken', 1, 0, empty())
 
 pure tokenizeLoop(input string, i int, state string, row int, lineStart int, tokens List<Token>) : List<Token>
   i >= length(input)
-    append(tokens, Token { type: "eof", row: row, col: 1, value: "", len: 0 })
+    append(tokens, Token { type: 'eof', row: row, col: 1, value: '', len: 0 })
   _ 
     c = charAt(input, i)
 
@@ -106,108 +106,108 @@ pure tokenizeLoop(input string, i int, state string, row int, lineStart int, tok
       'string' -> stringState(input, i, c, row, lineStart, tokens)
       'comment' -> comment(input, i, c, row, lineStart, tokens)
       'space' -> space(input, i, c, row, lineStart, tokens)
-      _ -> tokenizeLoop(input, i + 1, "noToken", row, lineStart, tokens)
+      _ -> tokenizeLoop(input, i + 1, 'noToken', row, lineStart, tokens)
 
 pure noToken(input string, i int, c int, row int, lineStart int, tokens List<Token>) : List<Token>
   isLetter(c)
-    tokenizeLoop(input, i + 1, "identifier", row, lineStart, tokens)
+    tokenizeLoop(input, i + 1, 'identifier', row, lineStart, tokens)
   isDigit(c)
-    tokenizeLoop(input, i + 1, "integer", row, lineStart, tokens)
+    tokenizeLoop(input, i + 1, 'integer', row, lineStart, tokens)
   _
     c
       charCode.and
-        tokenizeLoop(input, i + 1, "and", row, lineStart, tokens)
+        tokenizeLoop(input, i + 1, 'and', row, lineStart, tokens)
       charCode.bind
-        tokenizeLoop(input, i + 1, "bind", row, lineStart, tokens)
+        tokenizeLoop(input, i + 1, 'bind', row, lineStart, tokens)
       charCode.colon
-        tokenizeLoop(input, i + 1, "colon", row, lineStart, tokens)
+        tokenizeLoop(input, i + 1, 'colon', row, lineStart, tokens)
       charCode.comma
-        addToken("comma", input, i, row, lineStart, tokens, true)
+        addToken('comma', input, i, row, lineStart, tokens, true)
       charCode.cr || charCode.hash
-        tokenizeLoop(input, i + 1, "comment", row, lineStart, tokens)
+        tokenizeLoop(input, i + 1, 'comment', row, lineStart, tokens)
       charCode.div
-        tokenizeLoop(input, i + 1, "div", row, lineStart, tokens)
+        tokenizeLoop(input, i + 1, 'div', row, lineStart, tokens)
       charCode.dot
-        addToken("dot", input, i, row, lineStart, tokens, true)
+        addToken('dot', input, i, row, lineStart, tokens, true)
       charCode.doubleQuote
-        tokenizeLoop(input, i + 1, "string", row, lineStart, tokens)
+        tokenizeLoop(input, i + 1, 'string', row, lineStart, tokens)
       charCode.gt
-        tokenizeLoop(input, i + 1, "gt", row, lineStart, tokens)
+        tokenizeLoop(input, i + 1, 'gt', row, lineStart, tokens)
       charCode.lBracket
-        addToken("lBracket", input, i, row, lineStart, tokens, true)
+        addToken('lBracket', input, i, row, lineStart, tokens, true)
       charCode.lCurlyBracket
-        addToken("lCurlyBracket", input, i, row, lineStart, tokens, true)
+        addToken('lCurlyBracket', input, i, row, lineStart, tokens, true)
       charCode.lf
-        addToken("eol", input, i, row + 1, i + 1, tokens, true)
+        addToken('eol', input, i, row + 1, i + 1, tokens, true)
       charCode.lParen
-        tokenizeLoop(input, i + 1, "lParen", row, lineStart, tokens)
+        tokenizeLoop(input, i + 1, 'lParen', row, lineStart, tokens)
       charCode.lt
-        tokenizeLoop(input, i + 1, "lt", row, lineStart, tokens)
+        tokenizeLoop(input, i + 1, 'lt', row, lineStart, tokens)
       charCode.mul
-        addToken("mul", input, i, row, lineStart, tokens, true)
+        addToken('mul', input, i, row, lineStart, tokens, true)
       charCode.not
-        tokenizeLoop(input, i + 1, "not", row, lineStart, tokens)
+        tokenizeLoop(input, i + 1, 'not', row, lineStart, tokens)
       charCode.or
-        tokenizeLoop(input, i + 1, "or", row, lineStart, tokens)
+        tokenizeLoop(input, i + 1, 'or', row, lineStart, tokens)
       charCode.plus
-        addToken("add", input, i, row, lineStart, tokens, true)
+        addToken('add', input, i, row, lineStart, tokens, true)
       charCode.rBracket
-        addToken("rBracket", input, i, row, lineStart, tokens, true)
+        addToken('rBracket', input, i, row, lineStart, tokens, true)
       charCode.rCurlyBracket
-        addToken("rCurlyBracket", input, i, row, lineStart, tokens, true)
+        addToken('rCurlyBracket', input, i, row, lineStart, tokens, true)
       charCode.rest
-        addToken("rest", input, i, row, lineStart, tokens, true)
+        addToken('rest', input, i, row, lineStart, tokens, true)
       charCode.rParen
-        addToken("rParen", input, i, row, lineStart, tokens, true)
+        addToken('rParen', input, i, row, lineStart, tokens, true)
       charCode.singleQuote
-        tokenizeLoop(input, i + 1, "string", row, lineStart, tokens)
+        tokenizeLoop(input, i + 1, 'string', row, lineStart, tokens)
       charCode.space
-        tokenizeLoop(input, i + 1, "space", row, lineStart, tokens)
+        tokenizeLoop(input, i + 1, 'space', row, lineStart, tokens)
       charCode.sub
-        tokenizeLoop(input, i + 1, "sub", row, lineStart, tokens)
+        tokenizeLoop(input, i + 1, 'sub', row, lineStart, tokens)
       charCode.zero
-        tokenizeLoop(input, i + 1, "integer", row, lineStart, tokens)
+        tokenizeLoop(input, i + 1, 'integer', row, lineStart, tokens)
       _
-        addToken("error", input, i, row, lineStart, tokens, true)
+        addToken('error', input, i, row, lineStart, tokens, true)
 
 
 pure identifier(input string, i int, c int, row int, lineStart int, tokens List<Token>) : List<Token>
   isAlnum(c)
-    tokenizeLoop(input, i + 1, "identifier", row, lineStart, tokens)
+    tokenizeLoop(input, i + 1, 'identifier', row, lineStart, tokens)
   _
-    addToken("identifier", input, i, row, lineStart, tokens, false)
+    addToken('identifier', input, i, row, lineStart, tokens, false)
 
 pure integer(input string, i int, c int, row int, lineStart int, tokens List<Token>) : List<Token>
   isDigit(c)
-    tokenizeLoop(input, i + 1, "integer", row, lineStart, tokens)
+    tokenizeLoop(input, i + 1, 'integer', row, lineStart, tokens)
   c == charCode.dot
-    tokenizeLoop(input, i + 1, "number", row, lineStart, tokens)
+    tokenizeLoop(input, i + 1, 'number', row, lineStart, tokens)
   _
-    addToken("integer", input, i, row, lineStart, tokens, false)
+    addToken('integer', input, i, row, lineStart, tokens, false)
 
 pure number(input string, i int, c int, row int, lineStart int, tokens List<Token>) : List<Token>
   isDigit(c)
-    tokenizeLoop(input, i + 1, "number", row, lineStart, tokens)
+    tokenizeLoop(input, i + 1, 'number', row, lineStart, tokens)
   _
-    addToken("number", input, i, row, lineStart, tokens, false)
+    addToken('number', input, i, row, lineStart, tokens, false)
 
 pure stringState(input string, i int, c int, row int, lineStart int, tokens List<Token>) : List<Token>
   c != charCode.doubleQuote
-    tokenizeLoop(input, i + 1, "string", row, lineStart, tokens)
+    tokenizeLoop(input, i + 1, 'string', row, lineStart, tokens)
   _
-    addToken("text", input, i, row, lineStart, tokens, true)
+    addToken('text', input, i, row, lineStart, tokens, true)
 
 pure comment(input string, i int, c int, row int, lineStart int, tokens List<Token>) : List<Token>
   c != charCode.lf
-    tokenizeLoop(input, i + 1, "comment", row, lineStart, tokens)
+    tokenizeLoop(input, i + 1, 'comment', row, lineStart, tokens)
   _
-    tokenizeLoop(input, i + 1, "noToken", row + 1, i + 1, tokens)
+    tokenizeLoop(input, i + 1, 'noToken', row + 1, i + 1, tokens)
 
 pure space(input string, i int, c int, row int, lineStart int, tokens List<Token>) : List<Token>
   c == charCode.space
-    tokenizeLoop(input, i + 1, "space", row, lineStart, tokens)
+    tokenizeLoop(input, i + 1, 'space', row, lineStart, tokens)
   _
-    tokenizeLoop(input, i, "noToken", row, lineStart, tokens)
+    tokenizeLoop(input, i, 'noToken', row, lineStart, tokens)
 
 pure addToken(type string, input string, i int, row int, lineStart int, tokens List<Token>, advance bool) : List<Token>
   prepend(
@@ -215,7 +215,7 @@ pure addToken(type string, input string, i int, row int, lineStart int, tokens L
         type: type,
         row: row,
         col: i - lineStart + 1,
-        value: "",
+        value: '',
         len: 1
     },
     tokens
