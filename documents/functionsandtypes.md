@@ -1,4 +1,4 @@
-l# Functions and Types
+# Functions and Types
 
 This document explains how to write functions and types in Purefun, with examples and best practices. It builds on the concepts in funfiles.md.
 
