@@ -1,3 +1,5 @@
+*Atoms is going to be removed from Purefun. It will be replaced by functions declared without a body, these functions must be implemented inside the runtime*
+
 # Atoms
 
 Atoms are the lowest-level primitive operations available to the Purefun language. They are implemented in `C` (or platform-specific languages) and exposed to Purefun as built-in functions. Atoms are the bridge between Purefun and the underlying operating system or hardware.
