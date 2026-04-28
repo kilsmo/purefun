@@ -33,7 +33,7 @@ Rules:
 
 * No differentiation for “side-effect” modules — purity is enforced at call sites
 
-* Compiler rejects calls from pure/tail functions to impure functions
+* Compiler rejects calls from pure functions to impure functions
 
 ## 3. Implicit Export Rule
 
@@ -75,7 +75,7 @@ Rules:
 
 * Local modules can use pure functions from ppm modules freely.
 
-* Pure/tail functions cannot call side-effectful code — enforced by compiler.
+* Pure functions cannot call side-effectful code — enforced by compiler.
 
 * No special syntax is required for local vs ppm modules.
 
