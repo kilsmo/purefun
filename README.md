@@ -297,7 +297,7 @@ fun:io
 
 ```
 fun:io
-  'print'
+  print
 
 pure double(i int): int
   i * 2
