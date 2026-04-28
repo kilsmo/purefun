@@ -221,13 +221,13 @@ color
 **Core Modifiers**
 
 ```
-block, pure, record, side, self
+block, pure, record, side, self, variant
 ```
 
 **Primitives**
 
 ```
-int, num (floating-point), bool, string
+ bool, int, num (floating-point), string
 ```
 
 **Generic Types**
