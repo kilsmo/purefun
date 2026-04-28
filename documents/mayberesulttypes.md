@@ -51,7 +51,7 @@ variant Result<T, E>
 ### 2.1 Example:
 
 ```
-pure divide(a num, b num): Result[num, string]
+pure divide(a num, b num): Result<num, string>
   b == 0
     Failure('division by zero')
   _
