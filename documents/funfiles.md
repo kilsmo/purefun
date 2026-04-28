@@ -5,12 +5,12 @@
 Used to bring other modules or specific functions/types into scope.
 
 ```
-'fun/io'
+fun:io
   print
   exit
   getCommandLineArguments
 
-'./math.fun'
+:./math.fun
   add
   mul
 ```
