@@ -32,7 +32,8 @@ pure scale(r Rect, factor int): Rect
 
 Executed if this file is compiled as a program.
 
-Top-level expressions must be declared side if using side-effect functions like print.
+Top-level expressions must be declared side if using side-effect functions like print. (*TODO* It is not top-level-expressions that
+needs to be defined side to use side, they can use side functions by default, it is functions that is called from the top-level-expressions that need to be declared `side`.
 
 ```
 side main()
