@@ -120,7 +120,6 @@ A ppm module is always a single `.fun` file. The entire file is uploaded, but:
 To publish a new version of a module, use:
 
 ```purefun publish ./module.fun --bump <type>```
-
 where `<type>` is one of:
 
 * patch
@@ -129,6 +128,7 @@ where `<type>` is one of:
 
 * major
 
+(TODO: actually, `--bump` could be removed, ppm will be able to see if this is a patch, minor, or major version, depending on what kind of change has been made, the package owner should not need to care about defining if this is a patch, a minor upgrade, or a major upgrade)
 
 ### 5.1 Version Bump Rules
 
