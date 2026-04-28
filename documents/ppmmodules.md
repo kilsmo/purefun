@@ -4,13 +4,13 @@
 
 * A Purefun module is any `.fun` file intended for sharing via **ppm** (Purefun Package Manager).
 
-* **All functions marked `pure` or `tail` are automatically exported**.
+* **All functions marked `pure` are automatically exported**.
 
 * **Side-effect functions and top-level expressions** are present in the module file but are not accessible through ppm.
 
 * This ensures a clear separation:
 
-  * **Pure/tail functions → reusable, safe**
+  * **Pure functions → reusable, safe**
 
   * **Impure helpers or top-level code → local/internal** only
 
@@ -37,7 +37,7 @@ Rules:
 
 ## 3. Implicit Export Rule
 
-* **All `pure` and `tail` functions are exported implicitly.**
+* **All `pure` functions are exported implicitly.**
 
 * No exports list is needed.
 
@@ -83,9 +83,9 @@ Rules:
 
 * Compiler ensures:
 
-  * `pure` or `tail` functions do not call impure functions
+  * `pure` functions do not call impure functions
 
-  * All ppm-published functions are pure/tail
+  * All ppm-published functions are pure
 
 * This allows **any ppm module** to be fully trusted without inspecting internal code.
 
@@ -95,7 +95,7 @@ Rules:
 
 * The file can include:
 
-  * Pure/tail functions (exported)
+  * Pure functions (exported)
 
   * Impure helpers (hidden)
 
