@@ -7,7 +7,7 @@ Purefun provides two fundamental generic types for representing optional and fal
 The `Maybe` variant represents an optional value. It is used when a value may or may not be present, without involving side effects.
 
 ```
-variant Maybe[T]
+variant Maybe<T>
   Something(value T)
   Nothing()
 ```
@@ -18,7 +18,7 @@ variant Maybe[T]
 ### 1.1 Example
 
 ```
-pure findFirstEven(l List[int]): Maybe[int]
+pure findFirstEven(l List<int]>): Maybe<int>
   length(l) == 0
     Nothing()
   head(l) % 2 == 0
@@ -40,7 +40,7 @@ This design eliminates the need for null values and keeps all control flow expli
 The Result variant represents either `Success` or `Failure` of a computation, usually with additional information about the failure.
 
 ```
-variant Result[T, E]
+variant Result<T, E>
   Success(value T)
   Failure(error E)
 ```
@@ -67,6 +67,6 @@ match divide(10, 0)
 ## 3. Relationship between Maybe and Result
 
 `Maybe` is a simplified version of `Result`, where failure carries no information beyond “nothing.”
-You can think of `Maybe[T]` as equivalent to `Result[T, Unit]` with no payload for failure.
+You can think of `Maybe<T>` as equivalent to `Result<T, Unit>` with no payload for failure.
 
 Both types encourage explicit handling of missing values or errors without side effects, aligning with Purefun’s philosophy of predictable, expression-based design.
