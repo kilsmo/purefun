@@ -1,3 +1,5 @@
+*Atoms is going to be removed from Purefun. It will be replaced by functions declared without a body, these functions must be implemented inside the runtime*
+
 # Atom Naming Convention
 
 Atoms in PureFun use `snake_case` with a required prefix.
