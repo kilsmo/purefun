@@ -43,7 +43,7 @@ pure isValid(x int): bool
 
 * Line continuation:
 
-* If a line must continue, indent all continuation lines 4 spaces more than the base indentation of the first line.
+* If a line must continue, indent all continuation lines 4 spaces more than the base indentation of the first line. (TODO: this is something that needs to be reevaluated, is this the best way to handle line continuation)
 
 * Break lines at logical points (operators, commas, or between elements).
 
